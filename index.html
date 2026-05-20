@@ -5,978 +5,679 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>QILA Heritage — The Living Museum of Couture</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-  :root {
-    --gold: #B8965A;
-    --gold-light: #D4B078;
-    --gold-pale: #F0E4CC;
-    --black: #0A0A0A;
-    --charcoal: #1A1A1A;
-    --ash: #2C2C2C;
-    --smoke: #6B6B6B;
-    --ivory: #F7F3EE;
-    --cream: #EDE8E1;
-    --white: #FAFAF8;
-    --serif: 'Cormorant Garamond', Georgia, serif;
-    --sans: 'Jost', sans-serif;
-  }
+:root {
+  --gold:        #9A7A44;
+  --gold-light:  #C4A06A;
+  --gold-pale:   #E8D8BC;
+  --black:       #0E0D0B;
+  --charcoal:    #1C1B18;
+  --smoke:       #7A786E;
+  --stone:       #B0ADA5;
+  --linen:       #F2EDE5;
+  --cream:       #EAE4D8;
+  --parchment:   #E0D9CC;
+  --white:       #FAF9F6;
+  --serif: 'Cormorant Garamond', Georgia, serif;
+  --sans:  'Jost', sans-serif;
+}
 
-  html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; }
 
-  body {
-    background: var(--black);
-    color: var(--ivory);
-    font-family: var(--sans);
-    font-weight: 300;
-    letter-spacing: 0.02em;
-    overflow-x: hidden;
-    cursor: none;
-  }
+body {
+  background: var(--white);
+  color: var(--black);
+  font-family: var(--sans);
+  font-weight: 300;
+  letter-spacing: 0.02em;
+  overflow-x: hidden;
+  cursor: none;
+}
 
-  /* Custom Cursor */
-  .cursor {
-    position: fixed;
-    width: 8px; height: 8px;
-    background: var(--gold);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 9999;
-    transform: translate(-50%, -50%);
-    transition: transform 0.1s ease, width 0.3s ease, height 0.3s ease, background 0.3s ease;
-    mix-blend-mode: normal;
-  }
-  .cursor-ring {
-    position: fixed;
-    width: 36px; height: 36px;
-    border: 1px solid rgba(184,150,90,0.5);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 9998;
-    transform: translate(-50%, -50%);
-    transition: transform 0.25s cubic-bezier(0.23,1,0.32,1), width 0.4s ease, height 0.4s ease, opacity 0.3s ease;
-  }
-  body:has(a:hover) .cursor, body:has(button:hover) .cursor { width: 14px; height: 14px; }
-  body:has(a:hover) .cursor-ring, body:has(button:hover) .cursor-ring { width: 56px; height: 56px; opacity: 0.6; }
+/* ─── CURSOR ─────────────────────────────── */
+.cursor {
+  position: fixed; width: 7px; height: 7px;
+  background: var(--gold); border-radius: 50%;
+  pointer-events: none; z-index: 9999;
+  transform: translate(-50%,-50%);
+  transition: width .3s, height .3s;
+}
+.cursor-ring {
+  position: fixed; width: 34px; height: 34px;
+  border: 1px solid rgba(154,122,68,.45); border-radius: 50%;
+  pointer-events: none; z-index: 9998;
+  transform: translate(-50%,-50%);
+  transition: width .4s cubic-bezier(.23,1,.32,1), height .4s cubic-bezier(.23,1,.32,1), opacity .3s;
+}
+body:has(a:hover) .cursor       { width: 13px; height: 13px; }
+body:has(a:hover) .cursor-ring  { width: 52px;  height: 52px; opacity: .55; }
+body:has(.hamburger:hover) .cursor { background: var(--black); }
 
-  /* Nav */
-  nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 100;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 28px 48px;
-    mix-blend-mode: normal;
-  }
-  .nav-logo {
-    font-family: var(--serif);
-    font-weight: 300;
-    font-size: 1.1rem;
-    letter-spacing: 0.35em;
-    color: var(--ivory);
-    text-decoration: none;
-    text-transform: uppercase;
-    opacity: 0;
-    animation: fadeDown 1.2s 0.5s forwards;
-  }
-  .nav-right {
-    display: flex;
-    align-items: center;
-    gap: 36px;
-    opacity: 0;
-    animation: fadeDown 1.2s 0.7s forwards;
-  }
-  .nav-link {
-    font-family: var(--sans);
-    font-size: 0.65rem;
-    font-weight: 300;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: rgba(247,243,238,0.7);
-    text-decoration: none;
-    transition: color 0.3s ease;
-  }
-  .nav-link:hover { color: var(--gold); }
-  .hamburger {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    cursor: none;
-    padding: 4px;
-  }
-  .hamburger span {
-    display: block;
-    width: 22px; height: 1px;
-    background: var(--ivory);
-    transition: all 0.4s cubic-bezier(0.23,1,0.32,1);
-    transform-origin: center;
-  }
-  .hamburger.active span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
-  .hamburger.active span:nth-child(2) { opacity: 0; transform: scaleX(0); }
-  .hamburger.active span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+/* ─── SCROLL PROGRESS ───────────────────── */
+.nav-progress {
+  position: fixed; top: 0; left: 0; height: 1px;
+  background: var(--gold); z-index: 500; width: 0%;
+  transition: width .08s linear;
+}
 
-  /* Full-screen Menu Overlay */
-  .menu-overlay {
-    position: fixed;
-    inset: 0;
-    background: var(--charcoal);
-    z-index: 90;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-    padding: 0 10vw;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.6s cubic-bezier(0.23,1,0.32,1);
-  }
-  .menu-overlay.active { opacity: 1; pointer-events: all; }
-  .menu-overlay::before {
-    content: '';
-    position: absolute;
-    right: 0; top: 0;
-    width: 40%;
-    height: 100%;
-    background: linear-gradient(135deg, transparent, rgba(184,150,90,0.04));
-    pointer-events: none;
-  }
-  .menu-nav-item {
-    font-family: var(--serif);
-    font-size: clamp(2.5rem, 5vw, 5rem);
-    font-weight: 300;
-    letter-spacing: 0.05em;
-    color: var(--ivory);
-    text-decoration: none;
-    display: block;
-    line-height: 1.15;
-    position: relative;
-    overflow: hidden;
-    transition: color 0.3s ease;
-    transform: translateY(40px);
-    opacity: 0;
-    transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.23,1,0.32,1), color 0.3s ease;
-  }
-  .menu-overlay.active .menu-nav-item {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  .menu-overlay.active .menu-nav-item:nth-child(1) { transition-delay: 0.1s; }
-  .menu-overlay.active .menu-nav-item:nth-child(2) { transition-delay: 0.17s; }
-  .menu-overlay.active .menu-nav-item:nth-child(3) { transition-delay: 0.24s; }
-  .menu-overlay.active .menu-nav-item:nth-child(4) { transition-delay: 0.31s; }
-  .menu-overlay.active .menu-nav-item:nth-child(5) { transition-delay: 0.38s; }
-  .menu-nav-item:hover { color: var(--gold); }
-  .menu-nav-item::after {
-    content: '';
-    position: absolute;
-    bottom: 0; left: 0;
-    width: 0%; height: 1px;
-    background: var(--gold);
-    transition: width 0.4s ease;
-  }
-  .menu-nav-item:hover::after { width: 60px; }
-  .menu-tagline {
-    position: absolute;
-    bottom: 48px; right: 10vw;
-    font-family: var(--sans);
-    font-size: 0.6rem;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--smoke);
-    text-align: right;
-  }
+/* ─── NAV ────────────────────────────────── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 30px 52px;
+  transition: background .5s ease, border-color .5s ease, padding .4s ease;
+}
+nav.scrolled {
+  background: rgba(250,249,246,.94);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(154,122,68,.12);
+  padding: 18px 52px;
+}
+/* Over dark hero — keep text light */
+nav.hero-mode .nav-logo,
+nav.hero-mode .nav-link { color: rgba(242,237,229,.9); }
+nav.hero-mode .hamburger span { background: rgba(242,237,229,.85); }
 
-  /* Hero */
-  .hero {
-    height: 100vh;
-    min-height: 700px;
-    position: relative;
-    display: flex;
-    align-items: flex-end;
-    overflow: hidden;
-  }
-  .hero-bg {
-    position: absolute;
-    inset: 0;
-    background: 
-      radial-gradient(ellipse at 20% 50%, rgba(184,150,90,0.07) 0%, transparent 60%),
-      radial-gradient(ellipse at 80% 20%, rgba(184,150,90,0.04) 0%, transparent 50%),
-      linear-gradient(160deg, #0e0c0a 0%, #0A0A0A 50%, #0d0b09 100%);
-  }
-  /* Cinematic grain */
-  .hero-bg::after {
-    content: '';
-    position: absolute;
-    inset: -50%;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-    opacity: 0.35;
-    pointer-events: none;
-  }
-  .hero-editorial-img {
-    position: absolute;
-    right: 0; top: 0;
-    width: 52%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center top;
-    opacity: 0;
-    animation: heroImageReveal 2s 0.8s cubic-bezier(0.23,1,0.32,1) forwards;
-  }
-  .hero-img-overlay {
-    position: absolute;
-    right: 0; top: 0;
-    width: 52%;
-    height: 100%;
-    background: linear-gradient(to right, var(--black) 0%, transparent 30%, transparent 70%, rgba(10,10,10,0.4) 100%),
-                linear-gradient(to top, var(--black) 0%, transparent 30%);
-  }
-  .hero-content {
-    position: relative;
-    z-index: 2;
-    padding: 0 48px 80px;
-    max-width: 58%;
-  }
-  .hero-eyebrow {
-    font-family: var(--sans);
-    font-size: 0.6rem;
-    font-weight: 300;
-    letter-spacing: 0.35em;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 24px;
-    opacity: 0;
-    animation: fadeUp 1s 1.2s forwards;
-  }
-  .hero-title {
-    font-family: var(--serif);
-    font-size: clamp(3.5rem, 7vw, 7.5rem);
-    font-weight: 300;
-    line-height: 0.95;
-    letter-spacing: -0.01em;
-    color: var(--ivory);
-    margin-bottom: 32px;
-    opacity: 0;
-    animation: fadeUp 1.2s 1.4s forwards;
-  }
-  .hero-title em {
-    font-style: italic;
-    color: var(--gold-light);
-    display: block;
-  }
-  .hero-sub {
-    font-family: var(--sans);
-    font-size: 0.7rem;
-    font-weight: 300;
-    letter-spacing: 0.18em;
-    color: rgba(247,243,238,0.5);
-    text-transform: uppercase;
-    max-width: 280px;
-    line-height: 2;
-    margin-bottom: 48px;
-    opacity: 0;
-    animation: fadeUp 1s 1.7s forwards;
-  }
-  .hero-cta {
-    display: inline-flex;
-    align-items: center;
-    gap: 18px;
-    font-family: var(--sans);
-    font-size: 0.62rem;
-    font-weight: 300;
-    letter-spacing: 0.28em;
-    text-transform: uppercase;
-    color: var(--ivory);
-    text-decoration: none;
-    opacity: 0;
-    animation: fadeUp 1s 2s forwards;
-    transition: color 0.3s ease;
-  }
-  .hero-cta::after {
-    content: '';
-    display: block;
-    width: 48px; height: 1px;
-    background: var(--gold);
-    transition: width 0.4s ease;
-  }
-  .hero-cta:hover { color: var(--gold); }
-  .hero-cta:hover::after { width: 80px; }
-  .hero-scroll-hint {
-    position: absolute;
-    bottom: 40px; right: 48px;
-    font-family: var(--sans);
-    font-size: 0.55rem;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: rgba(184,150,90,0.5);
-    writing-mode: vertical-rl;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    opacity: 0;
-    animation: fadeIn 1s 2.5s forwards;
-  }
-  .hero-scroll-hint::before {
-    content: '';
-    display: block;
-    width: 1px; height: 60px;
-    background: linear-gradient(to bottom, transparent, var(--gold));
-    animation: scrollLine 2s 3s infinite;
-  }
+.nav-logo {
+  font-family: var(--serif); font-weight: 300;
+  font-size: 1.05rem; letter-spacing: .38em; text-transform: uppercase;
+  color: var(--black); text-decoration: none;
+  opacity: 0; animation: fadeDown 1.1s .4s forwards;
+  transition: color .4s;
+}
+.nav-right {
+  display: flex; align-items: center; gap: 36px;
+  opacity: 0; animation: fadeDown 1.1s .6s forwards;
+}
+.nav-link {
+  font-size: .6rem; font-weight: 300; letter-spacing: .22em;
+  text-transform: uppercase; color: var(--smoke);
+  text-decoration: none; transition: color .3s;
+}
+.nav-link:hover { color: var(--gold); }
 
-  /* Section Base */
-  section { position: relative; }
-  .section-label {
-    font-family: var(--sans);
-    font-size: 0.55rem;
-    letter-spacing: 0.38em;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 16px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-  }
-  .section-label::before {
-    content: '';
-    display: block;
-    width: 32px; height: 1px;
-    background: var(--gold);
-  }
+.hamburger { display: flex; flex-direction: column; gap: 5px; cursor: none; padding: 4px; }
+.hamburger span {
+  display: block; width: 22px; height: 1px; background: var(--black);
+  transition: all .4s cubic-bezier(.23,1,.32,1); transform-origin: center;
+}
+.hamburger.active span:nth-child(1) { transform: translateY(6px) rotate(45deg); background: var(--linen); }
+.hamburger.active span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.hamburger.active span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); background: var(--linen); }
 
-  /* Marquee Strip */
-  .marquee-strip {
-    background: var(--gold);
-    padding: 14px 0;
-    overflow: hidden;
-    white-space: nowrap;
-  }
-  .marquee-inner {
-    display: inline-flex;
-    animation: marquee 28s linear infinite;
-    gap: 0;
-  }
-  .marquee-item {
-    font-family: var(--serif);
-    font-size: 0.8rem;
-    font-weight: 300;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--black);
-    padding: 0 40px;
-  }
-  .marquee-dot {
-    color: rgba(10,10,10,0.3);
-    font-size: 0.5rem;
-  }
+/* ─── FULLSCREEN MENU ───────────────────── */
+.menu-overlay {
+  position: fixed; inset: 0; background: var(--charcoal); z-index: 190;
+  display: flex; flex-direction: column; justify-content: center; align-items: flex-start;
+  padding: 0 10vw;
+  opacity: 0; pointer-events: none;
+  transition: opacity .55s cubic-bezier(.23,1,.32,1);
+}
+.menu-overlay.active { opacity: 1; pointer-events: all; }
+.menu-overlay::after {
+  content: '';
+  position: absolute; right: 0; top: 0; width: 38%; height: 100%;
+  background: url('https://placehold.co/600x900/1C1B18/B8965A?text=QILA') center/cover no-repeat;
+  /* REPLACE: hero side image in menu */
+  opacity: .18;
+}
+.menu-nav-item {
+  font-family: var(--serif); font-size: clamp(2.2rem,5vw,5.5rem);
+  font-weight: 300; color: var(--linen); text-decoration: none;
+  display: block; line-height: 1.2;
+  transform: translateX(-30px); opacity: 0;
+  transition: color .3s, opacity .55s, transform .55s cubic-bezier(.23,1,.32,1);
+}
+.menu-overlay.active .menu-nav-item { opacity: 1; transform: translateX(0); }
+.menu-overlay.active .menu-nav-item:nth-child(1) { transition-delay: .08s; }
+.menu-overlay.active .menu-nav-item:nth-child(2) { transition-delay: .14s; }
+.menu-overlay.active .menu-nav-item:nth-child(3) { transition-delay: .20s; }
+.menu-overlay.active .menu-nav-item:nth-child(4) { transition-delay: .26s; }
+.menu-overlay.active .menu-nav-item:nth-child(5) { transition-delay: .32s; }
+.menu-nav-item:hover { color: var(--gold-light); }
+.menu-footer {
+  position: absolute; bottom: 48px; left: 10vw; right: 10vw;
+  display: flex; justify-content: space-between; align-items: flex-end;
+  pointer-events: none;
+}
+.menu-footer-left { font-size: .58rem; letter-spacing: .3em; color: var(--smoke); text-transform: uppercase; }
+.menu-footer-right { font-family: var(--serif); font-style: italic; font-size: 1rem; color: rgba(154,122,68,.4); }
 
-  /* Exhibition Section */
-  .exhibition {
-    background: var(--black);
-    padding: 120px 0;
-  }
-  .exhibition-header {
-    padding: 0 48px;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    margin-bottom: 80px;
-  }
-  .exhibition-title {
-    font-family: var(--serif);
-    font-size: clamp(2.8rem, 5vw, 5.5rem);
-    font-weight: 300;
-    line-height: 1;
-    letter-spacing: -0.02em;
-  }
-  .exhibition-title em { font-style: italic; color: var(--gold-light); }
-  .exhibition-desc {
-    max-width: 280px;
-    font-size: 0.72rem;
-    line-height: 2.1;
-    color: rgba(247,243,238,0.5);
-    letter-spacing: 0.05em;
-    text-align: right;
-  }
+/* ─── HERO ───────────────────────────────── */
+.hero {
+  position: relative; height: 100vh; min-height: 600px;
+  overflow: hidden; display: flex; align-items: flex-end;
+}
+/* Video / image container */
+.hero-media {
+  position: absolute; inset: 0; z-index: 0;
+}
+.hero-media video,
+.hero-media img {
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: center 20%;
+  display: block;
+}
+/* Cinematic vignette overlays */
+.hero-vignette {
+  position: absolute; inset: 0; z-index: 1;
+  background:
+    linear-gradient(to top,  rgba(14,13,11,.82) 0%, rgba(14,13,11,.2) 40%, transparent 70%),
+    linear-gradient(to right, rgba(14,13,11,.25) 0%, transparent 40%),
+    linear-gradient(to bottom, rgba(14,13,11,.4) 0%, transparent 30%);
+}
+/* Letterbox bars — cinematic feel */
+.hero-bar-top,
+.hero-bar-bottom {
+  position: absolute; left: 0; right: 0; z-index: 2;
+  background: var(--black); height: 0;
+  transition: height .8s cubic-bezier(.23,1,.32,1);
+}
+.hero-bar-top    { top: 0; }
+.hero-bar-bottom { bottom: 0; }
+.hero.loaded .hero-bar-top,
+.hero.loaded .hero-bar-bottom { height: 0; } /* bars start closed then open via JS */
 
-  /* Asymmetric Gallery Grid */
-  .gallery-grid {
-    padding: 0 24px;
-    display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    grid-template-rows: auto;
-    gap: 16px;
-  }
-  .gallery-item {
-    position: relative;
-    overflow: hidden;
-    background: var(--ash);
-  }
-  .gallery-item img {
-    width: 100%; height: 100%;
-    object-fit: cover;
-    object-position: center top;
-    transition: transform 0.9s cubic-bezier(0.23,1,0.32,1), filter 0.6s ease;
-    filter: brightness(0.92);
-    display: block;
-  }
-  .gallery-item:hover img { transform: scale(1.04); filter: brightness(1); }
-  .gallery-item-overlay {
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    padding: 32px 28px 28px;
-    background: linear-gradient(to top, rgba(10,10,10,0.85) 0%, transparent 100%);
-    transform: translateY(8px);
-    opacity: 0;
-    transition: opacity 0.4s ease, transform 0.4s ease;
-  }
-  .gallery-item:hover .gallery-item-overlay { opacity: 1; transform: translateY(0); }
-  .gallery-item-num {
-    font-family: var(--sans);
-    font-size: 0.5rem;
-    letter-spacing: 0.3em;
-    color: var(--gold);
-    margin-bottom: 6px;
-  }
-  .gallery-item-name {
-    font-family: var(--serif);
-    font-size: 1.3rem;
-    font-weight: 300;
-    letter-spacing: 0.05em;
-    color: var(--ivory);
-    line-height: 1.2;
-  }
-  .gallery-item-tech {
-    font-size: 0.58rem;
-    letter-spacing: 0.2em;
-    color: rgba(247,243,238,0.55);
-    margin-top: 4px;
-    text-transform: uppercase;
-  }
+/* Hero Content — ultra-minimal */
+.hero-content {
+  position: relative; z-index: 3;
+  padding: 0 52px 72px; width: 100%;
+  display: flex; flex-direction: column; align-items: flex-start;
+}
+.hero-brand {
+  font-family: var(--serif); font-weight: 300;
+  font-size: clamp(3rem, 7vw, 8rem);
+  letter-spacing: .12em; line-height: 1;
+  color: var(--linen);
+  text-shadow: 0 2px 40px rgba(0,0,0,.3);
+  opacity: 0; transform: translateY(20px);
+  animation: heroTitle 1.6s 1s cubic-bezier(.23,1,.32,1) forwards;
+}
+.hero-sub-line {
+  font-family: var(--serif); font-style: italic; font-weight: 300;
+  font-size: clamp(1rem, 2.2vw, 2rem);
+  color: rgba(232,216,188,.7); letter-spacing: .08em;
+  margin-top: 8px;
+  opacity: 0; animation: heroTitle 1.4s 1.4s cubic-bezier(.23,1,.32,1) forwards;
+}
+.hero-enter {
+  margin-top: 40px;
+  display: inline-flex; align-items: center; gap: 20px;
+  font-size: .6rem; letter-spacing: .3em; text-transform: uppercase;
+  color: rgba(232,216,188,.6); text-decoration: none;
+  opacity: 0; animation: fadeIn 1s 2.2s forwards;
+  transition: color .3s;
+}
+.hero-enter::after {
+  content: '';
+  display: block; width: 56px; height: 1px;
+  background: var(--gold-light);
+  transition: width .4s ease;
+}
+.hero-enter:hover { color: var(--gold-light); }
+.hero-enter:hover::after { width: 90px; }
 
-  /* Gallery Layout - Asymmetric positions */
-  .gi-1 { grid-column: 1/6; grid-row: 1; height: 680px; }
-  .gi-2 { grid-column: 6/9; grid-row: 1; height: 420px; align-self: start; }
-  .gi-3 { grid-column: 9/13; grid-row: 1; height: 520px; align-self: end; margin-top: 160px; }
-  .gi-4 { grid-column: 6/9; grid-row: 1; height: 240px; align-self: end; }
-  .gi-5 { grid-column: 1/5; grid-row: 2; height: 540px; margin-top: 16px; }
-  .gi-6 { grid-column: 5/9; grid-row: 2; height: 640px; margin-top: 16px; }
-  .gi-7 { grid-column: 9/13; grid-row: 2; height: 480px; margin-top: 16px; }
+/* Parallax hero image shift */
+.hero-media { will-change: transform; }
 
-  /* Craft Archive */
-  .craft-archive {
-    background: var(--ivory);
-    color: var(--black);
-    padding: 160px 0;
-    overflow: hidden;
-  }
-  .craft-inner {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0;
-    min-height: 80vh;
-  }
-  .craft-text-panel {
-    padding: 80px 72px 80px 80px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    position: relative;
-  }
-  .craft-text-panel .section-label { color: var(--gold); }
-  .craft-text-panel .section-label::before { background: var(--gold); }
-  .craft-heading {
-    font-family: var(--serif);
-    font-size: clamp(2.5rem, 4vw, 4.5rem);
-    font-weight: 300;
-    line-height: 1.05;
-    letter-spacing: -0.01em;
-    color: var(--black);
-    margin-bottom: 36px;
-  }
-  .craft-heading em { font-style: italic; color: var(--gold); }
-  .craft-body {
-    font-size: 0.78rem;
-    line-height: 2.2;
-    color: rgba(10,10,10,0.65);
-    letter-spacing: 0.04em;
-    max-width: 380px;
-    margin-bottom: 48px;
-  }
-  .craft-techniques {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    border-top: 1px solid rgba(10,10,10,0.12);
-  }
-  .craft-technique {
-    padding: 20px 0;
-    border-bottom: 1px solid rgba(10,10,10,0.1);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    cursor: none;
-    transition: padding-left 0.3s ease;
-  }
-  .craft-technique:hover { padding-left: 12px; }
-  .ct-name {
-    font-family: var(--serif);
-    font-size: 1.1rem;
-    font-weight: 400;
-    color: var(--black);
-    letter-spacing: 0.02em;
-  }
-  .ct-origin {
-    font-family: var(--sans);
-    font-size: 0.55rem;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    color: var(--gold);
-  }
-  .craft-visual-panel {
-    position: relative;
-    overflow: hidden;
-    background: var(--cream);
-  }
-  .craft-img-stack {
-    position: absolute;
-    inset: 0;
-  }
-  .craft-img-main {
-    width: 100%; height: 100%;
-    object-fit: cover;
-    object-position: center;
-    transition: transform 12s ease;
-  }
-  .craft-visual-panel:hover .craft-img-main { transform: scale(1.06); }
-  .craft-img-caption {
-    position: absolute;
-    bottom: 48px; left: 48px;
-    font-family: var(--serif);
-    font-size: 2.5rem;
-    font-weight: 300;
-    font-style: italic;
-    color: var(--ivory);
-    line-height: 1.2;
-    text-shadow: 0 2px 20px rgba(0,0,0,0.4);
-  }
+/* Scroll cue */
+.hero-scroll-cue {
+  position: absolute; bottom: 36px; right: 52px; z-index: 3;
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  opacity: 0; animation: fadeIn 1s 2.8s forwards;
+}
+.hero-scroll-cue span {
+  font-size: .52rem; letter-spacing: .35em; text-transform: uppercase;
+  color: rgba(232,216,188,.4); writing-mode: vertical-rl;
+}
+.scroll-line {
+  width: 1px; height: 60px;
+  background: linear-gradient(to bottom, rgba(154,122,68,.6), transparent);
+  animation: scrollPulse 2s 3s infinite;
+}
 
-  /* Editorial Strips */
-  .editorial-strip {
-    background: var(--charcoal);
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    min-height: 70vh;
-  }
-  .editorial-img-panel {
-    position: relative;
-    overflow: hidden;
-  }
-  .editorial-img-panel img {
-    width: 100%; height: 100%;
-    object-fit: cover;
-    object-position: center top;
-    transition: transform 0.8s cubic-bezier(0.23,1,0.32,1);
-  }
-  .editorial-img-panel:hover img { transform: scale(1.04); }
-  .editorial-text-panel {
-    padding: 80px 80px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    background: var(--charcoal);
-  }
-  .editorial-num {
-    font-family: var(--serif);
-    font-size: clamp(4rem,8vw,9rem);
-    font-weight: 300;
-    color: rgba(184,150,90,0.12);
-    line-height: 1;
-    margin-bottom: -16px;
-  }
-  .editorial-piece-name {
-    font-family: var(--serif);
-    font-size: clamp(1.8rem,3vw,3rem);
-    font-weight: 300;
-    letter-spacing: 0.02em;
-    color: var(--ivory);
-    margin-bottom: 24px;
-    line-height: 1.1;
-  }
-  .editorial-piece-name em { font-style: italic; color: var(--gold-light); }
-  .editorial-piece-desc {
-    font-size: 0.72rem;
-    line-height: 2.2;
-    color: rgba(247,243,238,0.5);
-    letter-spacing: 0.05em;
-    max-width: 340px;
-    margin-bottom: 40px;
-  }
-  .editorial-tag {
-    display: inline-flex;
-    align-items: center;
-    gap: 12px;
-    font-family: var(--sans);
-    font-size: 0.58rem;
-    letter-spacing: 0.28em;
-    text-transform: uppercase;
-    color: var(--gold);
-    border: 1px solid rgba(184,150,90,0.3);
-    padding: 12px 24px;
-    width: fit-content;
-    cursor: none;
-    transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
-  }
-  .editorial-tag:hover {
-    background: var(--gold);
-    color: var(--black);
-    border-color: var(--gold);
-  }
+/* Collection Year stamp */
+.hero-stamp {
+  position: absolute; top: 44%; right: 52px; z-index: 3;
+  opacity: 0; animation: fadeIn 1s 2.4s forwards;
+  text-align: right;
+}
+.hero-stamp-num {
+  font-family: var(--serif); font-size: 7rem; font-weight: 300;
+  color: rgba(154,122,68,.06); line-height: 1; letter-spacing: .05em;
+}
+.hero-stamp-label {
+  font-size: .52rem; letter-spacing: .3em; text-transform: uppercase;
+  color: rgba(232,216,188,.3);
+}
 
-  /* Founder Section */
-  .founder-section {
-    background: var(--black);
-    padding: 160px 48px;
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: 80px;
-    align-items: center;
-  }
-  .founder-label-vertical {
-    writing-mode: vertical-rl;
-    font-family: var(--sans);
-    font-size: 0.55rem;
-    letter-spacing: 0.35em;
-    text-transform: uppercase;
-    color: var(--smoke);
-    justify-self: center;
-  }
-  .founder-content { }
-  .founder-quote {
-    font-family: var(--serif);
-    font-size: clamp(1.8rem, 3.5vw, 4rem);
-    font-weight: 300;
-    font-style: italic;
-    line-height: 1.3;
-    color: var(--ivory);
-    margin-bottom: 48px;
-    position: relative;
-    padding-left: 40px;
-  }
-  .founder-quote::before {
-    content: '\201C';
-    position: absolute;
-    left: 0; top: -10px;
-    font-size: 4rem;
-    color: var(--gold);
-    line-height: 1;
-    font-style: normal;
-  }
-  .founder-attr {
-    display: flex;
-    align-items: center;
-    gap: 24px;
-  }
-  .founder-name {
-    font-family: var(--sans);
-    font-size: 0.62rem;
-    letter-spacing: 0.28em;
-    text-transform: uppercase;
-    color: var(--ivory);
-  }
-  .founder-title-attr {
-    font-family: var(--sans);
-    font-size: 0.58rem;
-    letter-spacing: 0.2em;
-    color: var(--gold);
-  }
-  .founder-line { width: 40px; height: 1px; background: var(--gold); }
+/* ─── MARQUEE ────────────────────────────── */
+.marquee-strip {
+  background: var(--gold); padding: 13px 0; overflow: hidden; white-space: nowrap;
+}
+.marquee-inner { display: inline-flex; animation: marquee 30s linear infinite; }
+.marquee-item {
+  font-family: var(--serif); font-size: .78rem; font-weight: 300;
+  letter-spacing: .28em; text-transform: uppercase;
+  color: var(--white); padding: 0 44px;
+}
+.marquee-dot { color: rgba(250,249,246,.35); font-size: .45rem; }
 
-  /* Heritage Digital */
-  .heritage-digital {
-    background: var(--cream);
-    color: var(--black);
-    padding: 120px 48px;
-    text-align: center;
-  }
-  .hd-title {
-    font-family: var(--serif);
-    font-size: clamp(2.5rem, 5vw, 6rem);
-    font-weight: 300;
-    letter-spacing: -0.02em;
-    line-height: 1;
-    margin-bottom: 24px;
-  }
-  .hd-title em { font-style: italic; color: var(--gold); }
-  .hd-sub {
-    font-family: var(--sans);
-    font-size: 0.65rem;
-    letter-spacing: 0.28em;
-    text-transform: uppercase;
-    color: rgba(10,10,10,0.5);
-    margin-bottom: 80px;
-  }
-  .hd-cards {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2px;
-    margin-top: 64px;
-    background: rgba(10,10,10,0.08);
-  }
-  .hd-card {
-    background: var(--cream);
-    padding: 56px 40px;
-    text-align: left;
-    transition: background 0.4s ease;
-  }
-  .hd-card:hover { background: var(--white); }
-  .hd-card-num {
-    font-family: var(--serif);
-    font-size: 3.5rem;
-    font-weight: 300;
-    color: rgba(10,10,10,0.1);
-    line-height: 1;
-    margin-bottom: 20px;
-  }
-  .hd-card-title {
-    font-family: var(--serif);
-    font-size: 1.4rem;
-    font-weight: 400;
-    color: var(--black);
-    margin-bottom: 16px;
-    letter-spacing: 0.02em;
-  }
-  .hd-card-text {
-    font-size: 0.7rem;
-    line-height: 2.1;
-    color: rgba(10,10,10,0.6);
-    letter-spacing: 0.04em;
-  }
+/* ─── GENERIC SECTION UTILITIES ─────────── */
+.section-label {
+  font-size: .54rem; letter-spacing: .36em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 14px;
+  display: flex; align-items: center; gap: 14px;
+}
+.section-label::before { content: ''; display: block; width: 28px; height: 1px; background: var(--gold); }
 
-  /* Footer */
-  footer {
-    background: var(--charcoal);
-    padding: 80px 48px 48px;
-    border-top: 1px solid rgba(184,150,90,0.15);
-  }
-  .footer-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 80px;
-  }
-  .footer-logo {
-    font-family: var(--serif);
-    font-size: 2.5rem;
-    font-weight: 300;
-    letter-spacing: 0.2em;
-    color: var(--ivory);
-  }
-  .footer-logo span { color: var(--gold); }
-  .footer-tagline {
-    font-family: var(--sans);
-    font-size: 0.58rem;
-    letter-spacing: 0.25em;
-    color: rgba(247,243,238,0.35);
-    text-transform: uppercase;
-    margin-top: 8px;
-  }
-  .footer-links {
-    display: flex;
-    gap: 64px;
-  }
-  .footer-col-title {
-    font-family: var(--sans);
-    font-size: 0.58rem;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 20px;
-  }
-  .footer-col a {
-    display: block;
-    font-size: 0.7rem;
-    color: rgba(247,243,238,0.5);
-    text-decoration: none;
-    letter-spacing: 0.08em;
-    line-height: 2.4;
-    transition: color 0.3s ease;
-  }
-  .footer-col a:hover { color: var(--ivory); }
-  .footer-bottom {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-top: 40px;
-    border-top: 1px solid rgba(247,243,238,0.07);
-  }
-  .footer-copy {
-    font-size: 0.58rem;
-    letter-spacing: 0.15em;
-    color: rgba(247,243,238,0.25);
-  }
-  .footer-craft {
-    font-family: var(--serif);
-    font-style: italic;
-    font-size: 0.75rem;
-    color: rgba(184,150,90,0.5);
-    letter-spacing: 0.05em;
-  }
+.ornament {
+  display: flex; align-items: center; justify-content: center; gap: 24px; padding: 40px 0;
+}
+.ornament-line { flex: 1; max-width: 200px; height: 1px; background: linear-gradient(to right, transparent, rgba(154,122,68,.28)); }
+.ornament-line.r { background: linear-gradient(to left, transparent, rgba(154,122,68,.28)); }
+.ornament-sym { font-family: var(--serif); font-size: 1rem; color: var(--gold); letter-spacing: .25em; }
 
-  /* Animations */
-  @keyframes fadeDown {
-    from { opacity: 0; transform: translateY(-12px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(18px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-  @keyframes heroImageReveal {
-    from { opacity: 0; clip-path: inset(0 100% 0 0); }
-    to { opacity: 1; clip-path: inset(0 0% 0 0); }
-  }
-  @keyframes marquee {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
-  }
-  @keyframes scrollLine {
-    0%, 100% { transform: scaleY(0); transform-origin: top; }
-    50% { transform: scaleY(1); transform-origin: top; }
-  }
+/* ─── SCROLL REVEAL (JS-driven) ─────────── */
+/* Base states — set via JS by adding class */
+[data-reveal] {
+  opacity: 0;
+  transition: opacity .9s cubic-bezier(.23,1,.32,1), transform .9s cubic-bezier(.23,1,.32,1);
+}
+[data-reveal="up"]    { transform: translateY(48px); }
+[data-reveal="left"]  { transform: translateX(-48px); }
+[data-reveal="right"] { transform: translateX(48px); }
+[data-reveal="scale"] { transform: scale(.96); }
+[data-reveal="fade"]  { transform: none; }
+[data-reveal].in-view { opacity: 1; transform: none; }
 
-  /* Reveal on scroll */
-  .reveal {
-    opacity: 0;
-    transform: translateY(32px);
-    transition: opacity 0.8s cubic-bezier(0.23,1,0.32,1), transform 0.8s cubic-bezier(0.23,1,0.32,1);
-  }
-  .reveal.visible { opacity: 1; transform: translateY(0); }
-  .reveal-delay-1 { transition-delay: 0.15s; }
-  .reveal-delay-2 { transition-delay: 0.3s; }
-  .reveal-delay-3 { transition-delay: 0.45s; }
+/* ─── EXHIBITION ─────────────────────────── */
+.exhibition { background: var(--white); padding: 130px 0 100px; }
 
-  /* Gold ornament divider */
-  .ornament {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 24px;
-    padding: 48px 0;
-  }
-  .ornament-line { flex: 1; height: 1px; background: linear-gradient(to right, transparent, rgba(184,150,90,0.3)); max-width: 200px; }
-  .ornament-line.right { background: linear-gradient(to left, transparent, rgba(184,150,90,0.3)); }
-  .ornament-symbol { font-family: var(--serif); font-size: 1.2rem; color: var(--gold); letter-spacing: 0.3em; }
+.exhibition-header {
+  padding: 0 52px; display: flex;
+  justify-content: space-between; align-items: flex-end; margin-bottom: 80px;
+}
+.exhibition-title {
+  font-family: var(--serif); font-size: clamp(2.6rem,5vw,5.5rem);
+  font-weight: 300; line-height: 1; letter-spacing: -.01em; color: var(--black);
+}
+.exhibition-title em { font-style: italic; color: var(--gold); }
+.exhibition-desc {
+  max-width: 260px; font-size: .7rem; line-height: 2.2;
+  color: var(--smoke); letter-spacing: .04em; text-align: right;
+}
 
-  /* Scroll indicator on nav */
-  .nav-progress {
-    position: fixed;
-    top: 0; left: 0;
-    height: 2px;
-    background: var(--gold);
-    z-index: 200;
-    width: 0%;
-    transition: width 0.1s ease;
-  }
+/* Asymmetric editorial grid */
+.gallery-grid {
+  padding: 0 28px;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 14px;
+}
+.g-item {
+  position: relative; overflow: hidden;
+  background: var(--parchment);
+}
+.g-item img {
+  width: 100%; height: 100%; object-fit: cover; object-position: center top;
+  display: block;
+  transition: transform 1s cubic-bezier(.23,1,.32,1), filter .6s;
+  filter: brightness(.94) saturate(.9);
+}
+.g-item:hover img { transform: scale(1.05); filter: brightness(1) saturate(1); }
 
-  /* Hover line effect for gallery items */
-  .gallery-item::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0;
-    width: 0%; height: 2px;
-    background: var(--gold);
-    z-index: 2;
-    transition: width 0.5s cubic-bezier(0.23,1,0.32,1);
-  }
-  .gallery-item:hover::before { width: 100%; }
+/* Top-line gold reveal on hover */
+.g-item::before {
+  content: ''; position: absolute; top: 0; left: 0;
+  width: 0; height: 2px; background: var(--gold); z-index: 3;
+  transition: width .5s cubic-bezier(.23,1,.32,1);
+}
+.g-item:hover::before { width: 100%; }
 
-  /* Dark nav on light sections */
-  nav.light .nav-logo, nav.light .nav-link { color: var(--black); }
-  nav.light .hamburger span { background: var(--black); }
+.g-item-caption {
+  position: absolute; bottom: 0; left: 0; right: 0; z-index: 2;
+  padding: 48px 26px 26px;
+  background: linear-gradient(to top, rgba(14,13,11,.78) 0%, transparent);
+  transform: translateY(6px); opacity: 0;
+  transition: opacity .4s, transform .4s;
+}
+.g-item:hover .g-item-caption { opacity: 1; transform: translateY(0); }
+.g-caption-num  { font-size: .5rem; letter-spacing: .3em; color: var(--gold); margin-bottom: 4px; }
+.g-caption-name { font-family: var(--serif); font-size: 1.25rem; font-weight: 300; color: var(--linen); line-height: 1.2; }
+.g-caption-tech { font-size: .56rem; letter-spacing: .18em; color: rgba(242,237,229,.5); margin-top: 3px; text-transform: uppercase; }
 
-  /* Iridescent header bg */
-  .iridescent-bg {
-    background: linear-gradient(135deg, 
-      rgba(184,150,90,0.05) 0%, 
-      transparent 30%,
-      rgba(140,120,80,0.03) 60%,
-      transparent 100%);
-  }
+/* Grid positions — intentionally asymmetric */
+.gi-1 { grid-column: 1/6;  grid-row: 1; height: 660px; }
+.gi-2 { grid-column: 6/9;  grid-row: 1; height: 400px; align-self: start; }
+.gi-3 { grid-column: 9/13; grid-row: 1; height: 500px; align-self: end; margin-top: 160px; }
+.gi-4 { grid-column: 6/9;  grid-row: 1; height: 246px; align-self: end; }
+.gi-5 { grid-column: 1/5;  grid-row: 2; height: 520px; margin-top: 14px; }
+.gi-6 { grid-column: 5/9;  grid-row: 2; height: 620px; margin-top: 14px; }
+.gi-7 { grid-column: 9/13; grid-row: 2; height: 460px; margin-top: 14px; }
+
+/* ─── CRAFT ARCHIVE ─────────────────────── */
+.craft-archive { background: var(--linen); padding: 140px 0; overflow: hidden; }
+.craft-inner { display: grid; grid-template-columns: 1fr 1fr; min-height: 85vh; }
+
+.craft-text-panel {
+  padding: 80px 72px 80px 80px;
+  display: flex; flex-direction: column; justify-content: center;
+  border-right: 1px solid rgba(154,122,68,.12);
+}
+.craft-heading {
+  font-family: var(--serif); font-size: clamp(2.4rem,4vw,4.8rem);
+  font-weight: 300; line-height: 1.05; letter-spacing: -.01em; color: var(--black);
+  margin-bottom: 32px;
+}
+.craft-heading em { font-style: italic; color: var(--gold); }
+.craft-body {
+  font-size: .73rem; line-height: 2.2; color: var(--smoke);
+  letter-spacing: .04em; max-width: 360px; margin-bottom: 52px;
+}
+.craft-techniques { border-top: 1px solid rgba(14,13,11,.1); }
+.craft-technique {
+  padding: 20px 0; border-bottom: 1px solid rgba(14,13,11,.08);
+  display: flex; align-items: center; justify-content: space-between;
+  cursor: none;
+  transition: padding-left .3s ease;
+}
+.craft-technique:hover { padding-left: 14px; }
+.ct-name   { font-family: var(--serif); font-size: 1.15rem; font-weight: 400; color: var(--black); }
+.ct-origin { font-size: .53rem; letter-spacing: .24em; text-transform: uppercase; color: var(--gold); }
+
+.craft-visual-panel { position: relative; overflow: hidden; background: var(--cream); }
+.craft-visual-panel img {
+  width: 100%; height: 100%; object-fit: cover; object-position: center;
+  display: block;
+  transition: transform 14s ease;
+}
+.craft-visual-panel:hover img { transform: scale(1.07); }
+.craft-img-text {
+  position: absolute; bottom: 52px; left: 52px;
+  font-family: var(--serif); font-style: italic; font-size: 2.8rem;
+  font-weight: 300; color: var(--white); line-height: 1.15;
+  text-shadow: 0 2px 24px rgba(0,0,0,.25);
+}
+
+/* ─── EDITORIAL STRIPS ──────────────────── */
+.ed-strip { display: grid; grid-template-columns: 1fr 1fr; min-height: 72vh; }
+.ed-strip.flip { direction: rtl; }
+.ed-strip.flip > * { direction: ltr; }
+
+.ed-img-panel { position: relative; overflow: hidden; background: var(--parchment); }
+.ed-img-panel img {
+  width: 100%; height: 100%; object-fit: cover; object-position: center top;
+  display: block; transition: transform .9s cubic-bezier(.23,1,.32,1);
+}
+.ed-img-panel:hover img { transform: scale(1.04); }
+
+.ed-text-panel {
+  padding: 80px 80px; background: var(--linen);
+  display: flex; flex-direction: column; justify-content: center;
+}
+.ed-num {
+  font-family: var(--serif); font-size: clamp(5rem,9vw,10rem);
+  font-weight: 300; color: rgba(154,122,68,.09); line-height: 1; margin-bottom: -18px;
+}
+.ed-piece-name {
+  font-family: var(--serif); font-size: clamp(1.7rem,2.8vw,3rem);
+  font-weight: 300; color: var(--black); margin-bottom: 24px; line-height: 1.1;
+}
+.ed-piece-name em { font-style: italic; color: var(--gold); }
+.ed-piece-desc {
+  font-size: .71rem; line-height: 2.2; color: var(--smoke);
+  letter-spacing: .04em; max-width: 340px; margin-bottom: 44px;
+}
+.ed-btn {
+  display: inline-flex; align-items: center; gap: 14px;
+  font-size: .58rem; letter-spacing: .28em; text-transform: uppercase;
+  color: var(--black); text-decoration: none;
+  border: 1px solid rgba(14,13,11,.2); padding: 13px 26px; width: fit-content;
+  cursor: none; transition: background .3s, color .3s, border-color .3s;
+}
+.ed-btn:hover { background: var(--gold); color: var(--white); border-color: var(--gold); }
+
+/* ─── HERITAGE GRID ─────────────────────── */
+.heritage-grid-sec { background: var(--white); padding: 130px 52px; }
+.heritage-grid-sec .section-label { justify-content: center; margin-bottom: 16px; }
+.hg-title {
+  font-family: var(--serif); font-size: clamp(2.5rem,5vw,5.5rem);
+  font-weight: 300; letter-spacing: -.01em; line-height: 1; text-align: center;
+  color: var(--black); margin-bottom: 80px;
+}
+.hg-title em { font-style: italic; color: var(--gold); }
+
+.heritage-grid {
+  display: grid; grid-template-columns: 1fr 1.7fr 1fr;
+  gap: 28px; align-items: end;
+}
+.hg-card { }
+.hg-card-img {
+  position: relative; overflow: hidden; background: var(--parchment);
+  margin-bottom: 20px;
+}
+.hg-card-img img {
+  width: 100%; height: 100%; object-fit: cover; object-position: center top;
+  display: block;
+  transition: transform .8s cubic-bezier(.23,1,.32,1);
+}
+.hg-card:hover .hg-card-img img { transform: scale(1.04); }
+.hg-card-img-tall  { height: 520px; }
+.hg-card-img-hero  { height: 680px; }
+.hg-card-label { font-size: .52rem; letter-spacing: .3em; color: var(--gold); text-transform: uppercase; margin-bottom: 6px; }
+.hg-card-name  { font-family: var(--serif); font-size: 1.3rem; font-weight: 300; color: var(--black); margin-bottom: 6px; line-height: 1.25; }
+.hg-card-name.center { text-align: center; }
+.hg-card-label.center { text-align: center; }
+.hg-card-desc  { font-size: .65rem; line-height: 2; color: var(--smoke); letter-spacing: .04em; }
+.hg-card-desc.right { text-align: right; }
+.hg-card-label.right { text-align: right; }
+.hg-card-name.right  { text-align: right; }
+
+/* ─── FOUNDER QUOTE ─────────────────────── */
+.founder-sec {
+  background: var(--charcoal); padding: 160px 52px;
+  display: grid; grid-template-columns: 120px 1fr; gap: 60px; align-items: center;
+}
+.founder-vert {
+  writing-mode: vertical-rl;
+  font-size: .52rem; letter-spacing: .35em; text-transform: uppercase;
+  color: var(--smoke); justify-self: center;
+}
+.founder-quote {
+  font-family: var(--serif); font-style: italic;
+  font-size: clamp(1.8rem,3.5vw,4rem); font-weight: 300;
+  line-height: 1.35; color: var(--linen);
+  position: relative; padding-left: 44px; margin-bottom: 48px;
+}
+.founder-quote::before {
+  content: '\201C'; position: absolute; left: 0; top: -12px;
+  font-size: 5rem; color: var(--gold); line-height: 1; font-style: normal;
+}
+.founder-attr { display: flex; align-items: center; gap: 20px; }
+.founder-line { width: 36px; height: 1px; background: var(--gold); }
+.founder-name  { font-size: .62rem; letter-spacing: .28em; text-transform: uppercase; color: var(--linen); }
+.founder-role  { font-size: .56rem; letter-spacing: .18em; color: var(--gold); margin-top: 2px; }
+
+/* ─── MUSEUM PILLARS ────────────────────── */
+.pillars { background: var(--cream); padding: 120px 52px; }
+.pillars-title {
+  font-family: var(--serif); font-size: clamp(2rem,4vw,4.5rem);
+  font-weight: 300; line-height: 1; color: var(--black); text-align: center;
+  margin-bottom: 80px;
+}
+.pillars-title em { font-style: italic; color: var(--gold); }
+
+.pillars-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 2px; background: rgba(14,13,11,.07); }
+.pillar {
+  background: var(--cream); padding: 56px 44px;
+  transition: background .4s;
+  position: relative; overflow: hidden;
+}
+.pillar:hover { background: var(--white); }
+.pillar::after {
+  content: ''; position: absolute; bottom: 0; left: 0;
+  width: 0; height: 2px; background: var(--gold);
+  transition: width .5s cubic-bezier(.23,1,.32,1);
+}
+.pillar:hover::after { width: 100%; }
+.pillar-num  { font-family: var(--serif); font-size: 4rem; font-weight: 300; color: rgba(14,13,11,.07); line-height: 1; margin-bottom: 20px; }
+.pillar-name { font-family: var(--serif); font-size: 1.5rem; font-weight: 400; color: var(--black); margin-bottom: 16px; }
+.pillar-text { font-size: .69rem; line-height: 2.15; color: var(--smoke); letter-spacing: .04em; }
+
+/* ─── FOOTER ─────────────────────────────── */
+footer { background: var(--black); color: var(--linen); padding: 80px 52px 44px; }
+.footer-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 72px; }
+.footer-logo { font-family: var(--serif); font-size: 2.8rem; font-weight: 300; letter-spacing: .2em; }
+.footer-logo em { font-style: normal; color: var(--gold); }
+.footer-tagline { font-size: .56rem; letter-spacing: .28em; color: var(--smoke); text-transform: uppercase; margin-top: 6px; }
+.footer-links { display: flex; gap: 60px; }
+.f-col-title  { font-size: .55rem; letter-spacing: .3em; text-transform: uppercase; color: var(--gold); margin-bottom: 18px; }
+.f-col a { display: block; font-size: .68rem; color: rgba(242,237,229,.45); text-decoration: none; letter-spacing: .06em; line-height: 2.5; transition: color .3s; }
+.f-col a:hover { color: var(--linen); }
+.footer-bottom { display: flex; justify-content: space-between; align-items: center; padding-top: 36px; border-top: 1px solid rgba(242,237,229,.06); }
+.footer-copy   { font-size: .56rem; letter-spacing: .12em; color: rgba(242,237,229,.2); }
+.footer-craft  { font-family: var(--serif); font-style: italic; font-size: .78rem; color: rgba(154,122,68,.4); }
+
+/* ─── PARALLAX SECTIONS ─────────────────── */
+.parallax-img { will-change: transform; }
+
+/* ─── MUSEUM COUNTER STRIP ───────────────── */
+.counter-strip {
+  background: var(--linen); padding: 64px 52px;
+  display: grid; grid-template-columns: repeat(4,1fr);
+  border-top: 1px solid rgba(154,122,68,.12);
+  border-bottom: 1px solid rgba(154,122,68,.12);
+}
+.counter-item { text-align: center; border-right: 1px solid rgba(154,122,68,.12); padding: 0 20px; }
+.counter-item:last-child { border-right: none; }
+.counter-num {
+  font-family: var(--serif); font-size: clamp(2.5rem,4vw,4.5rem);
+  font-weight: 300; color: var(--gold); line-height: 1; margin-bottom: 8px;
+}
+.counter-label { font-size: .56rem; letter-spacing: .3em; text-transform: uppercase; color: var(--smoke); }
+
+/* ─── ANIMATIONS ─────────────────────────── */
+@keyframes fadeDown  { from { opacity:0; transform:translateY(-12px); } to { opacity:1; transform:none; } }
+@keyframes fadeUp    { from { opacity:0; transform:translateY(18px);  } to { opacity:1; transform:none; } }
+@keyframes fadeIn    { from { opacity:0; } to { opacity:1; } }
+@keyframes heroTitle { from { opacity:0; transform:translateY(22px) skewY(1deg); } to { opacity:1; transform:none; } }
+@keyframes marquee   { from { transform:translateX(0); } to { transform:translateX(-50%); } }
+@keyframes scrollPulse {
+  0%   { transform:scaleY(0); transform-origin: top; opacity:0; }
+  50%  { transform:scaleY(1); transform-origin: top; opacity:1; }
+  100% { transform:scaleY(0); transform-origin: bottom; opacity:0; }
+}
+
+/* ─── HORIZONTAL TICKER FADE ────────────── */
+.ticker-fade {
+  background: var(--white); padding: 28px 0; overflow: hidden;
+  border-top: 1px solid rgba(154,122,68,.1);
+  border-bottom: 1px solid rgba(154,122,68,.1);
+}
+.ticker-inner { display: inline-flex; gap: 0; animation: marquee 40s linear infinite reverse; }
+.ticker-item { font-family: var(--serif); font-style: italic; font-size: 1.1rem; font-weight: 300; color: rgba(14,13,11,.18); padding: 0 48px; white-space: nowrap; }
+
+/* ─── STICKY SECTION LABEL ───────────────── */
+.sticky-label {
+  position: sticky; top: 100px;
+  font-size: .54rem; letter-spacing: .3em; color: rgba(154,122,68,.6);
+  text-transform: uppercase; padding: 0 52px; margin-bottom: -80px;
+  z-index: 10;
+}
 </style>
 </head>
 <body>
 
-<!-- Custom Cursor -->
-<div class="cursor" id="cursor"></div>
+<!-- Cursor -->
+<div class="cursor"     id="cursor"></div>
 <div class="cursor-ring" id="cursorRing"></div>
-
-<!-- Scroll Progress -->
 <div class="nav-progress" id="navProgress"></div>
 
-<!-- Navigation -->
-<nav id="mainNav">
+<!-- ═══════════════════════════════════════
+     NAV
+═══════════════════════════════════════ -->
+<nav id="mainNav" class="hero-mode">
   <a href="#" class="nav-logo">QILA Heritage</a>
   <div class="nav-right">
-    <a href="#" class="nav-link">Collections</a>
-    <a href="#" class="nav-link">Atelier</a>
-    <a href="#" class="nav-link">Commissions</a>
-    <div class="hamburger" id="hamburger">
-      <span></span><span></span><span></span>
-    </div>
+    <a href="#exhibition" class="nav-link">Collections</a>
+    <a href="#craft"      class="nav-link">Atelier</a>
+    <a href="#heritage"   class="nav-link">Heritage</a>
+    <div class="hamburger" id="hamburger"><span></span><span></span><span></span></div>
   </div>
 </nav>
 
-<!-- Full Screen Menu Overlay -->
+<!-- ═══════════════════════════════════════
+     FULLSCREEN MENU
+═══════════════════════════════════════ -->
 <div class="menu-overlay" id="menuOverlay">
   <a href="#" class="menu-nav-item">The Collections</a>
   <a href="#" class="menu-nav-item">Baroque Noir</a>
   <a href="#" class="menu-nav-item">Iridescent Heritage</a>
   <a href="#" class="menu-nav-item">The Atelier</a>
   <a href="#" class="menu-nav-item">Bespoke Commission</a>
-  <div class="menu-tagline">Jamshedpur · Est. 2024<br>Quiet Luxury · Heritage Couture</div>
+  <div class="menu-footer">
+    <div class="menu-footer-left">Jamshedpur · India<br>Est. 2024</div>
+    <div class="menu-footer-right">Quiet Luxury · Heritage Couture</div>
+  </div>
 </div>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-bg"></div>
-  <!-- Placeholder elegant gradient for hero image area -->
-  <div style="position:absolute;right:0;top:0;width:52%;height:100%;background:linear-gradient(160deg,#1a1410 0%,#2a1f14 40%,#1a1410 100%);"></div>
-  <!-- Decorative vertical text -->
-  <div style="position:absolute;right:53%;top:50%;transform:translateY(-50%);writing-mode:vertical-rl;font-family:var(--serif);font-size:0.6rem;letter-spacing:0.4em;color:rgba(184,150,90,0.3);text-transform:uppercase;">Baroque Noir Collection</div>
-  <!-- Decorative corner frame on image side -->
-  <div style="position:absolute;right:2%;top:8%;width:80px;height:80px;border-top:1px solid rgba(184,150,90,0.2);border-right:1px solid rgba(184,150,90,0.2);"></div>
-  <div style="position:absolute;right:2%;bottom:8%;width:80px;height:80px;border-bottom:1px solid rgba(184,150,90,0.2);border-right:1px solid rgba(184,150,90,0.2);"></div>
-
-  <!-- Hero visual simulation with CSS art -->
-  <div style="position:absolute;right:6%;top:50%;transform:translateY(-50%);width:38%;height:75vh;background:linear-gradient(170deg,#2d2218 0%,#1a1208 60%,#0d0c08 100%);display:flex;align-items:center;justify-content:center;overflow:hidden;">
-    <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 30% 30%,rgba(184,150,90,0.08) 0%,transparent 60%);"></div>
-    <div style="text-align:center;z-index:2;">
-      <div style="font-family:var(--serif);font-size:5rem;color:rgba(184,150,90,0.06);line-height:1;letter-spacing:0.2em;">QILA</div>
-      <div style="width:2px;height:120px;background:linear-gradient(to bottom,transparent,rgba(184,150,90,0.2),transparent);margin:20px auto;"></div>
-      <div style="font-family:var(--sans);font-size:0.5rem;letter-spacing:0.4em;color:rgba(184,150,90,0.3);text-transform:uppercase;">A Study in Shadow</div>
-    </div>
+<!-- ═══════════════════════════════════════
+     HERO — CINEMATIC FULLSCREEN
+═══════════════════════════════════════ -->
+<section class="hero" id="hero">
+  <!-- ┌─────────────────────────────────────
+       │ MEDIA LAYER
+       │ Replace src below with your video or image.
+       │ For video: use <video> tag. For still: use <img>.
+       │ Recommended hero image: 3840×2160px, dark/editorial fashion shot.
+       └───────────────────────────────────── -->
+  <div class="hero-media" id="heroMedia">
+    <!-- VIDEO option (uncomment and replace src):
+    <video autoplay muted loop playsinline poster="https://placehold.co/1920x1080/0E0D0B/B8965A?text=QILA+Heritage">
+      <source src="YOUR_VIDEO_FILE.mp4" type="video/mp4">
+    </video>
+    -->
+    <!-- IMAGE fallback (replace src with your hero editorial image) -->
+    <img
+      src="https://placehold.co/1920x1080/0E0D0B/9A7A44?text=HERO+EDITORIAL+IMAGE+%7C+1920x1080"
+      alt="QILA Heritage — Baroque Noir Collection"
+      id="heroImg"
+    >
+    <!-- REPLACE src above with your hero image URL, e.g.:
+         src="https://cdn.shopify.com/your-store/files/hero-baroque-noir.jpg"
+    -->
   </div>
 
+  <div class="hero-vignette"></div>
+  <div class="hero-bar-top"    id="heroBarTop"></div>
+  <div class="hero-bar-bottom" id="heroBarBottom"></div>
+
+  <!-- Minimal stamp -->
+  <div class="hero-stamp">
+    <div class="hero-stamp-num">2024</div>
+    <div class="hero-stamp-label">Couture Collection</div>
+  </div>
+
+  <!-- Minimal text — brand name + one line -->
   <div class="hero-content">
-    <p class="hero-eyebrow">Baroque Noir · Couture 2024</p>
-    <h1 class="hero-title">
-      The Art<br>of <em>Ancestral</em><br>Luxury
-    </h1>
-    <p class="hero-sub">Handcrafted heritage pieces rooted in centuries of Indian craft tradition</p>
-    <a href="#exhibition" class="hero-cta">Enter the Exhibition</a>
+    <div class="hero-brand">QILA<br>Heritage</div>
+    <div class="hero-sub-line">A Study in the Resonance of Shadow</div>
+    <a href="#exhibition" class="hero-enter">Enter the Exhibition</a>
   </div>
-  <div class="hero-scroll-hint">Scroll to explore</div>
+
+  <div class="hero-scroll-cue">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
 </section>
 
-<!-- Marquee -->
+<!-- ═══════════════════════════════════════
+     MARQUEE
+═══════════════════════════════════════ -->
 <div class="marquee-strip">
   <div class="marquee-inner">
     <span class="marquee-item">Pitta Work <span class="marquee-dot">◆</span></span>
@@ -985,243 +686,346 @@
     <span class="marquee-item">Architectural Pleating <span class="marquee-dot">◆</span></span>
     <span class="marquee-item">Baroque Couture <span class="marquee-dot">◆</span></span>
     <span class="marquee-item">Quiet Luxury <span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Ancestral Craft <span class="marquee-dot">◆</span></span>
     <span class="marquee-item">Pitta Work <span class="marquee-dot">◆</span></span>
     <span class="marquee-item">Zardozi Embroidery <span class="marquee-dot">◆</span></span>
     <span class="marquee-item">Heritage Patchwork <span class="marquee-dot">◆</span></span>
     <span class="marquee-item">Architectural Pleating <span class="marquee-dot">◆</span></span>
     <span class="marquee-item">Baroque Couture <span class="marquee-dot">◆</span></span>
     <span class="marquee-item">Quiet Luxury <span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Ancestral Craft <span class="marquee-dot">◆</span></span>
   </div>
 </div>
 
-<!-- Exhibition Section -->
+<!-- ═══════════════════════════════════════
+     EXHIBITION — GALLERY
+═══════════════════════════════════════ -->
 <section class="exhibition" id="exhibition">
-  <div class="exhibition-header reveal">
-    <div>
+  <div class="exhibition-header">
+    <div data-reveal="up">
       <div class="section-label">The Exhibition</div>
       <h2 class="exhibition-title">Baroque <em>Noir</em><br>Collection</h2>
     </div>
-    <p class="exhibition-desc">An editorial study in the resonance of shadow. Stark silhouettes, deeply rooted craft — redefining evening luxury through ancestral technique.</p>
+    <p class="exhibition-desc" data-reveal="up" data-delay="150">An editorial study in the resonance of shadow. Stark silhouettes, deeply rooted craft — redefining evening luxury through ancestral technique.</p>
   </div>
 
   <div class="gallery-grid">
-    <!-- Item 1 — Hero tall -->
-    <div class="gallery-item gi-1 reveal">
-      <div style="width:100%;height:100%;background:linear-gradient(170deg,#1e1811 0%,#110f09 100%);display:flex;align-items:center;justify-content:center;">
-        <div style="text-align:center;">
-          <div style="font-family:var(--serif);font-style:italic;font-size:1.2rem;color:rgba(184,150,90,0.25);letter-spacing:0.1em;">The Sovereign Drape</div>
-          <div style="width:1px;height:80px;background:linear-gradient(to bottom,transparent,rgba(184,150,90,0.15),transparent);margin:16px auto;"></div>
-          <div style="width:60px;height:60px;border:1px solid rgba(184,150,90,0.1);border-radius:50%;margin:0 auto;"></div>
-        </div>
-      </div>
-      <div class="gallery-item-overlay">
-        <div class="gallery-item-num">Look 01</div>
-        <div class="gallery-item-name">The Sovereign<br>Drape</div>
-        <div class="gallery-item-tech">Antique Metallic · Pitta Work</div>
+    <!-- ░░ LOOK 01 — replace image src ░░ -->
+    <div class="g-item gi-1" data-reveal="up">
+      <img
+        src="https://placehold.co/800x1200/D0C8BB/7A786E?text=LOOK+01%0AThe+Sovereign+Drape%0A%281200x1800px+recommended%29"
+        alt="Look 01 — The Sovereign Drape"
+      >
+      <!-- REPLACE src: your Look 01 image (portrait, 4:6 ratio) -->
+      <div class="g-item-caption">
+        <div class="g-caption-num">Look 01</div>
+        <div class="g-caption-name">The Sovereign Drape</div>
+        <div class="g-caption-tech">Antique Metallic · Pitta Work</div>
       </div>
     </div>
-    <!-- Item 2 -->
-    <div class="gallery-item gi-2 reveal reveal-delay-1">
-      <div style="width:100%;height:100%;background:linear-gradient(135deg,#1a1612 0%,#0e0c09 100%);"></div>
-      <div class="gallery-item-overlay">
-        <div class="gallery-item-num">Look 02</div>
-        <div class="gallery-item-name">The Pleated<br>Mantle</div>
-        <div class="gallery-item-tech">Architectural Pleating</div>
+
+    <!-- ░░ LOOK 02 ░░ -->
+    <div class="g-item gi-2" data-reveal="up" data-delay="100">
+      <img
+        src="https://placehold.co/600x800/D8D1C7/7A786E?text=LOOK+02%0AThe+Pleated+Mantle%0A%28600x800px%29"
+        alt="Look 02 — The Pleated Mantle"
+      >
+      <!-- REPLACE src: Look 02 image -->
+      <div class="g-item-caption">
+        <div class="g-caption-num">Look 02</div>
+        <div class="g-caption-name">The Pleated Mantle</div>
+        <div class="g-caption-tech">Architectural Pleating</div>
       </div>
     </div>
-    <!-- Item 3 -->
-    <div class="gallery-item gi-3 reveal reveal-delay-2">
-      <div style="width:100%;height:100%;background:linear-gradient(200deg,#1c1710 0%,#0d0b08 100%);"></div>
-      <div class="gallery-item-overlay">
-        <div class="gallery-item-num">Look 03</div>
-        <div class="gallery-item-name">The Cocktail<br>Edit</div>
-        <div class="gallery-item-tech">Dense Zardozi · Cage Structure</div>
+
+    <!-- ░░ LOOK 03 ░░ -->
+    <div class="g-item gi-3" data-reveal="right" data-delay="180">
+      <img
+        src="https://placehold.co/600x900/CAC2B6/7A786E?text=LOOK+03%0AThe+Cocktail+Edit%0A%28600x900px%29"
+        alt="Look 03 — The Cocktail Edit"
+      >
+      <!-- REPLACE src: Look 03 image -->
+      <div class="g-item-caption">
+        <div class="g-caption-num">Look 03</div>
+        <div class="g-caption-name">The Cocktail Edit</div>
+        <div class="g-caption-tech">Dense Zardozi · Cage Structure</div>
       </div>
     </div>
-    <!-- Item 4 -->
-    <div class="gallery-item gi-4 reveal reveal-delay-1">
-      <div style="width:100%;height:100%;background:linear-gradient(180deg,#181410 0%,#100e0b 100%);display:flex;align-items:center;justify-content:center;">
-        <div style="font-family:var(--sans);font-size:0.5rem;letter-spacing:0.35em;color:rgba(184,150,90,0.2);text-transform:uppercase;">Detail Study</div>
+
+    <!-- ░░ DETAIL CLOSE-UP ░░ -->
+    <div class="g-item gi-4" data-reveal="up" data-delay="120">
+      <img
+        src="https://placehold.co/600x400/C8C0B4/7A786E?text=DETAIL+SHOT%0AClose-up+Embroidery%0A%28600x400px%29"
+        alt="Craftsmanship Detail"
+      >
+      <!-- REPLACE src: embroidery/craft detail close-up -->
+    </div>
+
+    <!-- ░░ HERITAGE BLAZER ░░ -->
+    <div class="g-item gi-5" data-reveal="up">
+      <img
+        src="https://placehold.co/700x900/D4CCC0/7A786E?text=HERITAGE%0APatchwork+Blazer%0A%28700x900px%29"
+        alt="Heritage Patchwork Blazer"
+      >
+      <!-- REPLACE src: Heritage Patchwork Blazer image -->
+      <div class="g-item-caption">
+        <div class="g-caption-num">Heritage</div>
+        <div class="g-caption-name">The Patchwork Blazer</div>
+        <div class="g-caption-tech">Threadwork · Mirror Embroidery</div>
       </div>
     </div>
-    <!-- Row 2 items -->
-    <div class="gallery-item gi-5 reveal">
-      <div style="width:100%;height:100%;background:linear-gradient(150deg,#161310 0%,#0e0c09 100%);"></div>
-      <div class="gallery-item-overlay">
-        <div class="gallery-item-num">Heritage</div>
-        <div class="gallery-item-name">The Patchwork<br>Blazer</div>
-        <div class="gallery-item-tech">Threadwork · Mirror Embroidery</div>
+
+    <!-- ░░ CRIMSON DRAPE ░░ -->
+    <div class="g-item gi-6" data-reveal="up" data-delay="100">
+      <img
+        src="https://placehold.co/700x1100/CECCBE/7A786E?text=HERITAGE+02%0AThe+Crimson+Drape%0A%28700x1100px%29"
+        alt="The Crimson Drape"
+      >
+      <!-- REPLACE src: Crimson Drape editorial image -->
+      <div class="g-item-caption">
+        <div class="g-caption-num">Heritage 02</div>
+        <div class="g-caption-name">The Crimson Drape</div>
+        <div class="g-caption-tech">Midnight Grandeur · Zardozi</div>
       </div>
     </div>
-    <div class="gallery-item gi-6 reveal reveal-delay-1">
-      <div style="width:100%;height:100%;background:linear-gradient(160deg,#1e1a14 0%,#131009 100%);display:flex;align-items:flex-end;justify-content:flex-end;padding:32px;">
-        <div style="font-family:var(--serif);font-size:4rem;font-weight:300;font-style:italic;color:rgba(184,150,90,0.06);line-height:1;text-align:right;">Iridescent<br>Heritage</div>
-      </div>
-      <div class="gallery-item-overlay">
-        <div class="gallery-item-num">Heritage 02</div>
-        <div class="gallery-item-name">The Crimson<br>Drape</div>
-        <div class="gallery-item-tech">Midnight Grandeur · Zardozi</div>
-      </div>
-    </div>
-    <div class="gallery-item gi-7 reveal reveal-delay-2">
-      <div style="width:100%;height:100%;background:linear-gradient(180deg,#0d1208 0%,#0a0e06 100%);"></div>
-      <div class="gallery-item-overlay">
-        <div class="gallery-item-num">Heritage 03</div>
-        <div class="gallery-item-name">Emerald<br>Summer Soirée</div>
-        <div class="gallery-item-tech">Botanical Resort · Zardozi</div>
+
+    <!-- ░░ EMERALD SOIREE ░░ -->
+    <div class="g-item gi-7" data-reveal="right" data-delay="200">
+      <img
+        src="https://placehold.co/600x800/C8D4BC/7A786E?text=HERITAGE+03%0AEmerald+Soirée%0A%28600x800px%29"
+        alt="Emerald Summer Soirée"
+      >
+      <!-- REPLACE src: Emerald Summer Soirée image -->
+      <div class="g-item-caption">
+        <div class="g-caption-num">Heritage 03</div>
+        <div class="g-caption-name">Emerald Summer Soirée</div>
+        <div class="g-caption-tech">Botanical Resort · Zardozi</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Craft Archive -->
-<section class="craft-archive" id="craft">
-  <div class="craft-inner">
-    <div class="craft-text-panel">
-      <div class="section-label reveal">Craftsmanship Archives</div>
-      <h2 class="craft-heading reveal">Heritage<br>written<br>in <em>stitch</em></h2>
-      <p class="craft-body reveal">Every QILA garment is a living archive. Our artisans carry forward century-old techniques passed through generations — each embroidery motif a word, each garment a complete manuscript of Indian heritage reimagined for the contemporary spirit.</p>
-      <div class="craft-techniques reveal">
-        <div class="craft-technique">
-          <span class="ct-name">Pitta Work</span>
-          <span class="ct-origin">Rajasthani Origin</span>
-        </div>
-        <div class="craft-technique">
-          <span class="ct-name">Zardozi</span>
-          <span class="ct-origin">Mughal Heritage</span>
-        </div>
-        <div class="craft-technique">
-          <span class="ct-name">Mirror Appliqué</span>
-          <span class="ct-origin">Kutch Tradition</span>
-        </div>
-        <div class="craft-technique">
-          <span class="ct-name">Architectural Pleating</span>
-          <span class="ct-origin">Contemporary Craft</span>
-        </div>
-        <div class="craft-technique">
-          <span class="ct-name">Heritage Patchwork</span>
-          <span class="ct-origin">Multidisciplinary</span>
-        </div>
-      </div>
-    </div>
-    <div class="craft-visual-panel">
-      <div style="width:100%;height:100%;min-height:700px;background:linear-gradient(160deg,#1a180f 0%,#0e0c07 50%,#171410 100%);display:flex;align-items:center;justify-content:center;position:relative;">
-        <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 60% 40%,rgba(184,150,90,0.07) 0%,transparent 65%);"></div>
-        <!-- Decorative pattern suggesting embroidery -->
-        <svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" style="opacity:0.12;">
-          <circle cx="100" cy="100" r="80" stroke="#B8965A" stroke-width="0.5"/>
-          <circle cx="100" cy="100" r="60" stroke="#B8965A" stroke-width="0.5"/>
-          <circle cx="100" cy="100" r="40" stroke="#B8965A" stroke-width="0.5"/>
-          <circle cx="100" cy="100" r="4" fill="#B8965A"/>
-          <line x1="100" y1="20" x2="100" y2="180" stroke="#B8965A" stroke-width="0.5"/>
-          <line x1="20" y1="100" x2="180" y2="100" stroke="#B8965A" stroke-width="0.5"/>
-          <line x1="43" y1="43" x2="157" y2="157" stroke="#B8965A" stroke-width="0.5"/>
-          <line x1="157" y1="43" x2="43" y2="157" stroke="#B8965A" stroke-width="0.5"/>
-          <path d="M100 20 Q120 60 100 100 Q80 60 100 20" stroke="#B8965A" stroke-width="0.5" fill="none"/>
-          <path d="M180 100 Q140 120 100 100 Q140 80 180 100" stroke="#B8965A" stroke-width="0.5" fill="none"/>
-          <path d="M100 180 Q80 140 100 100 Q120 140 100 180" stroke="#B8965A" stroke-width="0.5" fill="none"/>
-          <path d="M20 100 Q60 80 100 100 Q60 120 20 100" stroke="#B8965A" stroke-width="0.5" fill="none"/>
-        </svg>
-      </div>
-      <div class="craft-img-caption">One Stitch<br>at a Time</div>
-    </div>
-  </div>
-</section>
-
-<!-- Editorial Strips - Featured Pieces -->
-<div style="background:var(--charcoal);">
-  <!-- Strip 1 -->
-  <div class="editorial-strip reveal">
-    <div class="editorial-img-panel">
-      <div style="width:100%;height:100%;min-height:70vh;background:linear-gradient(160deg,#0d1410 0%,#070e08 100%);display:flex;align-items:center;justify-content:center;">
-        <div style="text-align:center;padding:40px;">
-          <div style="font-family:var(--serif);font-size:0.7rem;letter-spacing:0.3em;color:rgba(184,150,90,0.3);margin-bottom:24px;text-transform:uppercase;">Exhibit 07</div>
-          <div style="width:100px;height:100px;border:1px solid rgba(184,150,90,0.1);margin:0 auto 24px;border-radius:50%;"></div>
-          <div style="font-family:var(--serif);font-style:italic;font-size:1rem;color:rgba(184,150,90,0.2);">Regal Symmetry</div>
-        </div>
-      </div>
-    </div>
-    <div class="editorial-text-panel">
-      <div class="editorial-num">07</div>
-      <h3 class="editorial-piece-name">The Emerald<br><em>Heritage Longcoat</em></h3>
-      <p class="editorial-piece-desc">Full-length symmetry rendered in deep emerald, covered in floor-to-neck intricate embroidery. A testament to the artisan's devotion to craft — every inch a labour of heritage.</p>
-      <a href="#" class="editorial-tag">Explore This Piece</a>
-    </div>
-  </div>
-  <!-- Strip 2 - reversed -->
-  <div class="editorial-strip reveal" style="direction:rtl;">
-    <div class="editorial-img-panel" style="direction:ltr;">
-      <div style="width:100%;height:100%;min-height:70vh;background:linear-gradient(160deg,#181008 0%,#0e0a06 100%);display:flex;align-items:center;justify-content:center;">
-        <div style="text-align:center;padding:40px;">
-          <div style="font-family:var(--serif);font-size:0.7rem;letter-spacing:0.3em;color:rgba(184,150,90,0.3);margin-bottom:24px;text-transform:uppercase;">Exhibit 06</div>
-          <div style="font-family:var(--serif);font-style:italic;font-size:3rem;font-weight:300;color:rgba(184,150,90,0.08);line-height:1;">The<br>Vanguard</div>
-        </div>
-      </div>
-    </div>
-    <div class="editorial-text-panel" style="direction:ltr;">
-      <div class="editorial-num">06</div>
-      <h3 class="editorial-piece-name">Avant-Garde<br><em>Sculptural Gown</em></h3>
-      <p class="editorial-piece-desc">A revolutionary silhouette in black silk. Architectural piping extends beyond the body into space — a garment that refuses the boundary between fashion and sculpture.</p>
-      <a href="#" class="editorial-tag">Explore This Piece</a>
-    </div>
+<!-- ─── Italic ticker ────────────────────── -->
+<div class="ticker-fade">
+  <div class="ticker-inner">
+    <span class="ticker-item">The Sovereign Drape</span>
+    <span class="ticker-item">·</span>
+    <span class="ticker-item">A Study in Resonance</span>
+    <span class="ticker-item">·</span>
+    <span class="ticker-item">The Pleated Mantle</span>
+    <span class="ticker-item">·</span>
+    <span class="ticker-item">Iridescent Heritage</span>
+    <span class="ticker-item">·</span>
+    <span class="ticker-item">The Cocktail Edit</span>
+    <span class="ticker-item">·</span>
+    <span class="ticker-item">Quiet Luxury</span>
+    <span class="ticker-item">·</span>
+    <span class="ticker-item">The Sovereign Drape</span>
+    <span class="ticker-item">·</span>
+    <span class="ticker-item">A Study in Resonance</span>
+    <span class="ticker-item">·</span>
+    <span class="ticker-item">The Pleated Mantle</span>
+    <span class="ticker-item">·</span>
+    <span class="ticker-item">Iridescent Heritage</span>
+    <span class="ticker-item">·</span>
+    <span class="ticker-item">The Cocktail Edit</span>
+    <span class="ticker-item">·</span>
+    <span class="ticker-item">Quiet Luxury</span>
+    <span class="ticker-item">·</span>
   </div>
 </div>
 
-<!-- Iridescent Heritage Section -->
-<section style="background:var(--black);padding:120px 48px;" id="heritage">
-  <div class="section-label reveal" style="justify-content:center;">The Iridescent Heritage Collection</div>
-  <div class="ornament reveal">
-    <div class="ornament-line"></div>
-    <div class="ornament-symbol">✦ &nbsp; Q I L A &nbsp; ✦</div>
-    <div class="ornament-line right"></div>
+<!-- ═══════════════════════════════════════
+     MUSEUM COUNTER STRIP
+═══════════════════════════════════════ -->
+<div class="counter-strip">
+  <div class="counter-item" data-reveal="up">
+    <div class="counter-num" data-count="9">0</div>
+    <div class="counter-label">Curated Looks</div>
   </div>
+  <div class="counter-item" data-reveal="up" data-delay="100">
+    <div class="counter-num" data-count="5">0</div>
+    <div class="counter-label">Heritage Techniques</div>
+  </div>
+  <div class="counter-item" data-reveal="up" data-delay="200">
+    <div class="counter-num" data-count="200">0</div>
+    <div class="counter-label">Years of Craft Lineage</div>
+  </div>
+  <div class="counter-item" data-reveal="up" data-delay="300">
+    <div class="counter-num" data-count="2">0</div>
+    <div class="counter-label">Collections This Season</div>
+  </div>
+</div>
 
-  <!-- Three column editorial layout -->
-  <div style="display:grid;grid-template-columns:1fr 1.6fr 1fr;gap:24px;align-items:end;" class="reveal">
-    <div style="padding-bottom:60px;">
-      <div style="height:380px;background:linear-gradient(170deg,#100e10 0%,#0a080a 100%);margin-bottom:24px;position:relative;overflow:hidden;">
-        <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 30%,rgba(100,60,120,0.04) 0%,transparent 70%);"></div>
-        <div style="position:absolute;bottom:24px;left:24px;font-family:var(--serif);font-style:italic;font-size:0.9rem;color:rgba(184,150,90,0.2);">Midnight Paisley</div>
+<!-- ═══════════════════════════════════════
+     CRAFT ARCHIVE
+═══════════════════════════════════════ -->
+<section class="craft-archive" id="craft">
+  <div class="craft-inner">
+    <div class="craft-text-panel">
+      <div class="section-label" data-reveal="fade">Craftsmanship Archives</div>
+      <h2 class="craft-heading" data-reveal="up">Heritage<br>written in<br><em>stitch</em></h2>
+      <p class="craft-body" data-reveal="up" data-delay="120">Every QILA garment is a living archive. Our artisans carry forward century-old techniques passed through generations — each embroidery motif a word, each garment a complete manuscript of Indian heritage reimagined for the contemporary spirit.</p>
+      <div class="craft-techniques" data-reveal="up" data-delay="200">
+        <div class="craft-technique"><span class="ct-name">Pitta Work</span><span class="ct-origin">Rajasthani Origin</span></div>
+        <div class="craft-technique"><span class="ct-name">Zardozi</span><span class="ct-origin">Mughal Heritage</span></div>
+        <div class="craft-technique"><span class="ct-name">Mirror Appliqué</span><span class="ct-origin">Kutch Tradition</span></div>
+        <div class="craft-technique"><span class="ct-name">Architectural Pleating</span><span class="ct-origin">Contemporary Craft</span></div>
+        <div class="craft-technique"><span class="ct-name">Heritage Patchwork</span><span class="ct-origin">Multidisciplinary</span></div>
       </div>
-      <div class="section-label" style="font-size:0.5rem;margin-bottom:8px;">Exhibit 04</div>
-      <div style="font-family:var(--serif);font-size:1.3rem;font-weight:300;color:var(--ivory);margin-bottom:8px;">Aurelia Midnight<br>Paisley</div>
-      <div style="font-size:0.62rem;color:rgba(247,243,238,0.4);letter-spacing:0.08em;line-height:1.9;">Deep navy silk, oversized silver paisley embroidery. Modern Opulence.</div>
     </div>
-    <div>
-      <div style="height:560px;background:linear-gradient(160deg,#0a100a 0%,#060b06 100%);margin-bottom:24px;position:relative;overflow:hidden;">
-        <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 40%,rgba(184,150,90,0.05) 0%,transparent 60%);"></div>
-        <!-- Decorative -->
-        <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;">
-          <svg width="120" height="120" viewBox="0 0 120 120" fill="none" style="opacity:0.07;">
-            <path d="M60 10 L110 60 L60 110 L10 60 Z" stroke="#B8965A" stroke-width="0.5"/>
-            <circle cx="60" cy="60" r="30" stroke="#B8965A" stroke-width="0.5"/>
-            <circle cx="60" cy="60" r="3" fill="#B8965A"/>
-          </svg>
-        </div>
-        <div style="position:absolute;bottom:24px;left:24px;right:24px;">
-          <div style="font-family:var(--sans);font-size:0.5rem;letter-spacing:0.3em;color:var(--gold);margin-bottom:4px;">FEATURED PIECE</div>
-          <div style="font-family:var(--serif);font-size:1.5rem;font-weight:300;color:var(--ivory);">The Blush<br>Embellished Gown</div>
-        </div>
-      </div>
-      <div class="section-label" style="font-size:0.5rem;margin-bottom:8px;justify-content:center;">Exhibit 09 · The Peaches of Spring</div>
-      <div style="font-family:var(--serif);font-size:1.5rem;font-weight:300;color:var(--ivory);text-align:center;margin-bottom:8px;">A Final Note of<br><em style="color:var(--gold-light);">Romance</em></div>
-    </div>
-    <div style="padding-bottom:60px;">
-      <div style="height:380px;background:linear-gradient(170deg,#0a0f08 0%,#060b05 100%);margin-bottom:24px;position:relative;overflow:hidden;">
-        <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,rgba(20,100,20,0.04) 0%,transparent 70%);"></div>
-        <div style="position:absolute;bottom:24px;right:24px;font-family:var(--serif);font-style:italic;font-size:0.9rem;color:rgba(184,150,90,0.2);text-align:right;">Fluidity in Silk</div>
-      </div>
-      <div class="section-label" style="font-size:0.5rem;margin-bottom:8px;justify-content:flex-end;">Exhibit 08</div>
-      <div style="font-family:var(--serif);font-size:1.3rem;font-weight:300;color:var(--ivory);text-align:right;margin-bottom:8px;">Emerald Opulence<br>Kaftan</div>
-      <div style="font-size:0.62rem;color:rgba(247,243,238,0.4);letter-spacing:0.08em;line-height:1.9;text-align:right;">Heavy zardozi yoke, scalloped silver-embroidered borders.</div>
+
+    <div class="craft-visual-panel">
+      <!-- ░░ CRAFT / ARTISAN IMAGE ░░
+           Replace src with a close-up of embroidery, craft process, or artisan hands.
+           Recommended: 1200x1600px, portrait orientation.
+      -->
+      <img
+        class="parallax-img"
+        src="https://placehold.co/900x1100/D8D0C0/7A786E?text=CRAFT+IMAGE%0AArtisan+%2F+Detail+Shot%0A%28900x1100px%29"
+        alt="QILA Craftsmanship — Artisan Detail"
+        id="craftImg"
+      >
+      <!-- REPLACE src above: artisan embroidery detail or craft process shot -->
+      <div class="craft-img-text">One Stitch<br>at a Time</div>
     </div>
   </div>
 </section>
 
-<!-- Founder Quote -->
-<section class="founder-section">
-  <div class="founder-label-vertical reveal">Creative Vision</div>
-  <div class="founder-content reveal">
+<!-- ═══════════════════════════════════════
+     EDITORIAL STRIPS
+═══════════════════════════════════════ -->
+
+<!-- Strip 1 -->
+<div class="ed-strip" data-reveal="fade">
+  <div class="ed-img-panel">
+    <!-- ░░ EDITORIAL PIECE IMAGE ░░
+         Replace with Emerald Heritage Longcoat image.
+         Recommended: 1200x900px, landscape or portrait.
+    -->
+    <img
+      src="https://placehold.co/900x800/C8D0BC/7A786E?text=EXHIBIT+07%0AEmerald+Heritage+Longcoat%0A%28900x800px%29"
+      alt="Exhibit 07 — Emerald Heritage Longcoat"
+    >
+    <!-- REPLACE src: Emerald Heritage Longcoat editorial image -->
+  </div>
+  <div class="ed-text-panel">
+    <div class="ed-num">07</div>
+    <h3 class="ed-piece-name">The Emerald<br><em>Heritage Longcoat</em></h3>
+    <p class="ed-piece-desc">Full-length symmetry rendered in deep emerald, covered floor-to-neck in intricate embroidery. A testament to the artisan's devotion — every inch a labour of heritage.</p>
+    <a href="#" class="ed-btn">Explore This Piece</a>
+  </div>
+</div>
+
+<!-- Strip 2 — flipped -->
+<div class="ed-strip flip" data-reveal="fade">
+  <div class="ed-img-panel">
+    <!-- ░░ AVANT-GARDE GOWN IMAGE ░░
+         Replace with Avant-Garde Sculptural Gown image.
+         Recommended: 1200x900px.
+    -->
+    <img
+      src="https://placehold.co/900x800/C4C0BC/7A786E?text=EXHIBIT+06%0AAvant-Garde+Sculptural+Gown%0A%28900x800px%29"
+      alt="Exhibit 06 — Avant-Garde Sculptural Gown"
+    >
+    <!-- REPLACE src: Avant-Garde Sculptural Gown editorial image -->
+  </div>
+  <div class="ed-text-panel">
+    <div class="ed-num">06</div>
+    <h3 class="ed-piece-name">Avant-Garde<br><em>Sculptural Gown</em></h3>
+    <p class="ed-piece-desc">A revolutionary silhouette in black silk. Architectural piping extends beyond the body into space — a garment that refuses the boundary between fashion and sculpture.</p>
+    <a href="#" class="ed-btn">Explore This Piece</a>
+  </div>
+</div>
+
+<!-- Strip 3 -->
+<div class="ed-strip" data-reveal="fade">
+  <div class="ed-img-panel">
+    <!-- ░░ BLUSH GOWN IMAGE ░░
+         Replace with Blush Embellished Gown image.
+    -->
+    <img
+      src="https://placehold.co/900x800/D8CCB8/7A786E?text=EXHIBIT+09%0ABlush+Embellished+Gown%0A%28900x800px%29"
+      alt="Exhibit 09 — Blush Embellished Gown"
+    >
+    <!-- REPLACE src: Blush Embellished Gown image -->
+  </div>
+  <div class="ed-text-panel">
+    <div class="ed-num">09</div>
+    <h3 class="ed-piece-name">The Blush<br><em>Embellished Gown</em></h3>
+    <p class="ed-piece-desc">A final note of romance in ivory and peach. Hand-stitched detailing across tulle — each flower placed individually, each petal a meditation on feminine grace.</p>
+    <a href="#" class="ed-btn">Explore This Piece</a>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     IRIDESCENT HERITAGE GRID
+═══════════════════════════════════════ -->
+<section class="heritage-grid-sec" id="heritage">
+  <div class="section-label" style="justify-content:center;" data-reveal="fade">The Iridescent Heritage Collection</div>
+  <div class="ornament" data-reveal="fade">
+    <div class="ornament-line"></div>
+    <div class="ornament-sym">✦ &nbsp; Q I L A &nbsp; ✦</div>
+    <div class="ornament-line r"></div>
+  </div>
+  <h2 class="hg-title" data-reveal="up">Where <em>Heritage</em><br>meets the Avant-Garde</h2>
+
+  <div class="heritage-grid">
+    <!-- Left card -->
+    <div class="hg-card" data-reveal="left" style="padding-bottom:60px;">
+      <div class="hg-card-img hg-card-img-tall">
+        <!-- ░░ AURELIA MIDNIGHT PAISLEY IMAGE ░░ -->
+        <img
+          src="https://placehold.co/500x700/C4C8D0/7A786E?text=EXHIBIT+04%0AAurelia+Midnight%0APaisley%0A%28500x700px%29"
+          alt="Aurelia Midnight Paisley"
+        >
+        <!-- REPLACE src: Aurelia Midnight Paisley image -->
+      </div>
+      <div class="hg-card-label">Exhibit 04</div>
+      <div class="hg-card-name">Aurelia Midnight Paisley</div>
+      <div class="hg-card-desc">Deep navy silk, oversized silver paisley. Modern Opulence collection.</div>
+    </div>
+
+    <!-- Centre card — taller -->
+    <div class="hg-card" data-reveal="up" data-delay="100">
+      <div class="hg-card-img hg-card-img-hero">
+        <!-- ░░ FEATURED CENTRE IMAGE ░░
+             Use your most striking hero piece here — full bleed, high detail.
+             Recommended: 700x1000px.
+        -->
+        <img
+          src="https://placehold.co/700x1000/CCCCC0/7A786E?text=FEATURED+CENTRE%0ASignature+Piece%0A%28700x1000px+recommended%29"
+          alt="QILA Heritage — Featured Signature Piece"
+        >
+        <!-- REPLACE src: your hero / most iconic piece photo -->
+      </div>
+      <div class="hg-card-label center">Exhibit 09 · The Peaches of Spring</div>
+      <div class="hg-card-name center">A Final Note of <em style="font-style:italic;color:var(--gold);">Romance</em></div>
+    </div>
+
+    <!-- Right card -->
+    <div class="hg-card" data-reveal="right" data-delay="150" style="padding-bottom:60px;">
+      <div class="hg-card-img hg-card-img-tall">
+        <!-- ░░ EMERALD OPULENCE KAFTAN IMAGE ░░ -->
+        <img
+          src="https://placehold.co/500x700/C0CCC0/7A786E?text=EXHIBIT+08%0AEmerald+Opulence%0AKaftan%0A%28500x700px%29"
+          alt="Emerald Opulence Kaftan"
+        >
+        <!-- REPLACE src: Emerald Opulence Kaftan image -->
+      </div>
+      <div class="hg-card-label right">Exhibit 08</div>
+      <div class="hg-card-name right">Emerald Opulence Kaftan</div>
+      <div class="hg-card-desc right">Heavy zardozi yoke, scalloped silver-embroidered borders. Fluidity in Silk.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     FOUNDER QUOTE (dark)
+═══════════════════════════════════════ -->
+<section class="founder-sec">
+  <div class="founder-vert" data-reveal="fade">Creative Vision</div>
+  <div data-reveal="up">
     <blockquote class="founder-quote">
       Fashion is the museum of our lives. These pieces are not merely garments, but artifacts of heritage reimagined for the modern spirit.
     </blockquote>
@@ -1229,143 +1033,218 @@
       <div class="founder-line"></div>
       <div>
         <div class="founder-name">Yuvi Sidhu</div>
-        <div class="founder-title-attr">Founder & Creative Director, QILA</div>
+        <div class="founder-role">Founder &amp; Creative Director, QILA</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Digital Museum Info -->
-<section class="heritage-digital">
-  <div class="section-label reveal" style="justify-content:center;">Why QILA</div>
-  <h2 class="hd-title reveal">The <em>Living</em><br>Museum of Couture</h2>
-  <p class="hd-sub reveal">Jamshedpur · Digital-First Luxury Atelier</p>
-  <div class="hd-cards reveal">
-    <div class="hd-card">
-      <div class="hd-card-num">01</div>
-      <div class="hd-card-title">Ancestral Craft</div>
-      <div class="hd-card-text">Each technique is drawn from a living lineage of Indian artisanship — pitta work, zardozi, and mirror embroidery practiced over centuries, reinterpreted for the contemporary form.</div>
+<!-- ═══════════════════════════════════════
+     MUSEUM PILLARS
+═══════════════════════════════════════ -->
+<section class="pillars">
+  <h2 class="pillars-title" data-reveal="up">The <em>Philosophy</em><br>of QILA</h2>
+  <div class="pillars-grid">
+    <div class="pillar" data-reveal="up">
+      <div class="pillar-num">01</div>
+      <div class="pillar-name">Ancestral Craft</div>
+      <div class="pillar-text">Each technique is drawn from a living lineage of Indian artisanship — pitta work, zardozi, and mirror embroidery practiced over centuries, reinterpreted for the contemporary form.</div>
     </div>
-    <div class="hd-card">
-      <div class="hd-card-num">02</div>
-      <div class="hd-card-title">Quiet Luxury</div>
-      <div class="hd-card-text">We prioritize technical mastery and intellectual minimalism over loud branding. The garment speaks first. The label is the last thing you notice — if at all.</div>
+    <div class="pillar" data-reveal="up" data-delay="120">
+      <div class="pillar-num">02</div>
+      <div class="pillar-name">Quiet Luxury</div>
+      <div class="pillar-text">We prioritize technical mastery and intellectual minimalism over loud branding. The garment speaks first. The label is the last thing you notice — if at all.</div>
     </div>
-    <div class="hd-card">
-      <div class="hd-card-num">03</div>
-      <div class="hd-card-title">Bespoke Commission</div>
-      <div class="hd-card-text">Every client who approaches QILA for a bespoke commission enters a dialogue — not a transaction. We build garments that become heirlooms, artifacts of a personal heritage.</div>
+    <div class="pillar" data-reveal="up" data-delay="240">
+      <div class="pillar-num">03</div>
+      <div class="pillar-name">Bespoke Commission</div>
+      <div class="pillar-text">Every client who approaches QILA for a bespoke commission enters a dialogue — not a transaction. We build garments that become heirlooms, artifacts of a personal heritage.</div>
     </div>
   </div>
 </section>
 
-<!-- Footer -->
+<!-- ═══════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════ -->
 <footer>
   <div class="footer-top">
     <div>
-      <div class="footer-logo">Q<span>I</span>LA</div>
-      <div class="footer-tagline">Heritage Couture · Jamshedpur</div>
+      <div class="footer-logo">Q<em>I</em>LA</div>
+      <div class="footer-tagline">Heritage Couture · Jamshedpur, India</div>
     </div>
     <div class="footer-links">
-      <div class="footer-col">
-        <div class="footer-col-title">Collections</div>
+      <div class="f-col">
+        <div class="f-col-title">Collections</div>
         <a href="#">Baroque Noir</a>
         <a href="#">Iridescent Heritage</a>
         <a href="#">The Aurelia Study</a>
         <a href="#">Archive</a>
       </div>
-      <div class="footer-col">
-        <div class="footer-col-title">Atelier</div>
+      <div class="f-col">
+        <div class="f-col-title">Atelier</div>
         <a href="#">About QILA</a>
         <a href="#">Craftsmanship</a>
         <a href="#">Bespoke Commission</a>
         <a href="#">The Artisans</a>
       </div>
-      <div class="footer-col">
-        <div class="footer-col-title">Connect</div>
+      <div class="f-col">
+        <div class="f-col-title">Connect</div>
         <a href="#">Instagram</a>
         <a href="#">Pinterest</a>
         <a href="#">Contact</a>
-        <a href="#">Press</a>
+        <a href="#">Press &amp; Stockists</a>
       </div>
     </div>
   </div>
   <div class="footer-bottom">
-    <div class="footer-copy">© 2024 QILA Heritage. All Rights Reserved. Jamshedpur, India.</div>
+    <div class="footer-copy">© 2024 QILA Heritage. All Rights Reserved.</div>
     <div class="footer-craft">We build our legacy one stitch at a time.</div>
   </div>
 </footer>
 
+<!-- ═══════════════════════════════════════
+     SCRIPTS
+═══════════════════════════════════════ -->
 <script>
-  // Custom cursor
-  const cursor = document.getElementById('cursor');
-  const cursorRing = document.getElementById('cursorRing');
-  let mx = 0, my = 0, rx = 0, ry = 0;
-  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
-  function animateCursor() {
-    cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
-    rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
-    cursorRing.style.left = rx + 'px'; cursorRing.style.top = ry + 'px';
-    requestAnimationFrame(animateCursor);
+/* ─── Cursor ──────────────────────────── */
+const cursor = document.getElementById('cursor');
+const ring   = document.getElementById('cursorRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+(function animate() {
+  cursor.style.cssText = `left:${mx}px;top:${my}px`;
+  rx += (mx - rx) * .11; ry += (my - ry) * .11;
+  ring.style.cssText = `left:${rx}px;top:${ry}px`;
+  requestAnimationFrame(animate);
+})();
+
+/* ─── Nav / hero-mode ─────────────────── */
+const nav       = document.getElementById('mainNav');
+const navProg   = document.getElementById('navProgress');
+const heroEl    = document.getElementById('hero');
+const heroH     = () => heroEl.getBoundingClientRect().bottom;
+
+window.addEventListener('scroll', () => {
+  const sy = window.scrollY;
+  const total = document.body.scrollHeight - innerHeight;
+  navProg.style.width = (sy / total * 100) + '%';
+
+  // scrolled bg
+  nav.classList.toggle('scrolled', sy > 60);
+  // light text only while hero is visible
+  nav.classList.toggle('hero-mode', heroH() > 80);
+}, { passive: true });
+
+/* ─── Hamburger menu ──────────────────── */
+const hamburger   = document.getElementById('hamburger');
+const menuOverlay = document.getElementById('menuOverlay');
+let open = false;
+hamburger.addEventListener('click', () => {
+  open = !open;
+  hamburger.classList.toggle('active', open);
+  menuOverlay.classList.toggle('active', open);
+  document.body.style.overflow = open ? 'hidden' : '';
+});
+menuOverlay.querySelectorAll('.menu-nav-item').forEach(a => {
+  a.addEventListener('click', () => {
+    open = false; hamburger.classList.remove('active');
+    menuOverlay.classList.remove('active');
+    document.body.style.overflow = '';
+  });
+});
+
+/* ─── Hero cinematic open ─────────────── */
+(function heroOpen() {
+  const bt = document.getElementById('heroBarTop');
+  const bb = document.getElementById('heroBarBottom');
+  bt.style.height = '50%'; bb.style.height = '50%';
+  setTimeout(() => {
+    bt.style.transition = 'height 1.1s cubic-bezier(.77,0,.18,1)';
+    bb.style.transition = 'height 1.1s cubic-bezier(.77,0,.18,1)';
+    bt.style.height = '0'; bb.style.height = '0';
+  }, 200);
+})();
+
+/* ─── Hero parallax ───────────────────── */
+const heroMedia = document.getElementById('heroMedia');
+window.addEventListener('scroll', () => {
+  const sy = window.scrollY;
+  if (sy < innerHeight) {
+    heroMedia.style.transform = `translateY(${sy * 0.32}px)`;
   }
-  animateCursor();
+}, { passive: true });
 
-  // Hamburger / menu
-  const hamburger = document.getElementById('hamburger');
-  const menuOverlay = document.getElementById('menuOverlay');
-  let menuOpen = false;
-  hamburger.addEventListener('click', () => {
-    menuOpen = !menuOpen;
-    hamburger.classList.toggle('active', menuOpen);
-    menuOverlay.classList.toggle('active', menuOpen);
-    document.body.style.overflow = menuOpen ? 'hidden' : '';
-  });
-  menuOverlay.querySelectorAll('.menu-nav-item').forEach(link => {
-    link.addEventListener('click', () => {
-      menuOpen = false;
-      hamburger.classList.remove('active');
-      menuOverlay.classList.remove('active');
-      document.body.style.overflow = '';
-    });
-  });
-
-  // Scroll progress
-  const navProgress = document.getElementById('navProgress');
+/* ─── Craft image parallax ────────────── */
+const craftImg = document.getElementById('craftImg');
+if (craftImg) {
   window.addEventListener('scroll', () => {
-    const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight);
-    navProgress.style.width = (pct * 100) + '%';
-  });
+    const rect = craftImg.closest('.craft-visual-panel').getBoundingClientRect();
+    if (rect.top < innerHeight && rect.bottom > 0) {
+      const progress = (innerHeight - rect.top) / (innerHeight + rect.height);
+      craftImg.style.transform = `translateY(${(progress - 0.5) * -60}px)`;
+    }
+  }, { passive: true });
+}
 
-  // Scroll reveal
-  const reveals = document.querySelectorAll('.reveal');
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) { entry.target.classList.add('visible'); }
-    });
-  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-  reveals.forEach(el => observer.observe(el));
-
-  // Nav background on scroll
-  const nav = document.getElementById('mainNav');
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 80) {
-      nav.style.background = 'rgba(10,10,10,0.92)';
-      nav.style.backdropFilter = 'blur(12px)';
-      nav.style.borderBottom = '1px solid rgba(184,150,90,0.1)';
-    } else {
-      nav.style.background = 'transparent';
-      nav.style.backdropFilter = 'none';
-      nav.style.borderBottom = 'none';
+/* ─── Scroll reveal ───────────────────── */
+const revealEls = document.querySelectorAll('[data-reveal]');
+const ro = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const delay = e.target.dataset.delay || 0;
+      setTimeout(() => e.target.classList.add('in-view'), +delay);
+      ro.unobserve(e.target);
     }
   });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+revealEls.forEach(el => ro.observe(el));
 
-  // Smooth anchor scroll
-  document.querySelectorAll('a[href^="#"]').forEach(a => {
-    a.addEventListener('click', e => {
-      const target = document.querySelector(a.getAttribute('href'));
-      if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); }
-    });
+/* ─── Counter animation ───────────────── */
+const counters = document.querySelectorAll('[data-count]');
+const co = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    const el    = e.target;
+    const end   = +el.dataset.count;
+    const dur   = 1400;
+    const start = performance.now();
+    const suffix = end >= 100 ? '+' : '';
+    (function tick(now) {
+      const t = Math.min((now - start) / dur, 1);
+      const ease = 1 - Math.pow(1 - t, 3);
+      el.textContent = Math.floor(ease * end) + (t === 1 ? suffix : '');
+      if (t < 1) requestAnimationFrame(tick);
+    })(start);
+    co.unobserve(el);
   });
+}, { threshold: 0.5 });
+counters.forEach(c => co.observe(c));
+
+/* ─── Smooth scroll anchors ───────────── */
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const t = document.querySelector(a.getAttribute('href'));
+    if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth' }); }
+  });
+});
+
+/* ─── Gallery item stagger on enter ─────  */
+const galleryItems = document.querySelectorAll('.g-item');
+const go = new IntersectionObserver(entries => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      const items = [...e.target.closest('.gallery-grid').querySelectorAll('.g-item')];
+      const idx   = items.indexOf(e.target);
+      setTimeout(() => e.target.style.opacity = '1', idx * 80);
+      go.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.05 });
+galleryItems.forEach(g => { g.style.opacity = '0'; g.style.transition = 'opacity .7s ease'; go.observe(g); });
+
+/* ─── Pillar line-draw on hover (decorative) ─── */
+// already handled in CSS ::after transition
 </script>
+
 </body>
 </html>
