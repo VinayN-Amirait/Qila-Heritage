@@ -104,9 +104,9 @@ nav.hero-mode .hamburger span { background: rgba(242,237,229,.85); }
   display: block; width: 22px; height: 1px; background: var(--black);
   transition: all .4s cubic-bezier(.23,1,.32,1); transform-origin: center;
 }
-.hamburger.active span:nth-child(1) { transform: translateY(6px) rotate(45deg); background: var(--linen); }
+.hamburger.active span:nth-child(1) { transform: translateY(6px) rotate(45deg); background: var(--black); }
 .hamburger.active span:nth-child(2) { opacity: 0; transform: scaleX(0); }
-.hamburger.active span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); background: var(--linen); }
+.hamburger.active span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); background: var(--black); }
 
 /* ─── FULLSCREEN MENU ───────────────────── */
 .menu-overlay {
@@ -146,112 +146,213 @@ nav.hero-mode .hamburger span { background: rgba(242,237,229,.85); }
 .menu-footer-left { font-size: .58rem; letter-spacing: .3em; color: var(--smoke); text-transform: uppercase; }
 .menu-footer-right { font-family: var(--serif); font-style: italic; font-size: 1rem; color: rgba(154,122,68,.4); }
 
-/* ─── HERO ───────────────────────────────── */
+/* ─── HERO — PORTRAIT VIDEO LAYOUT ──────────────────────── */
 .hero {
-  position: relative; height: 100vh; min-height: 600px;
-  overflow: hidden; display: flex; align-items: flex-end;
+  position: relative;
+  height: 100vh;
+  min-height: 600px;
+  overflow: hidden;
+  display: flex;
+  align-items: stretch;
+  background: var(--white);
 }
-/* Video / image container */
-.hero-media {
-  position: absolute; inset: 0; z-index: 0;
-}
-.hero-media video,
-.hero-media img {
-  width: 100%; height: 100%;
-  object-fit: cover; object-position: center 20%;
-  display: block;
-}
-/* Cinematic vignette overlays */
-.hero-vignette {
-  position: absolute; inset: 0; z-index: 1;
-  background:
-    linear-gradient(to top,  rgba(14,13,11,.82) 0%, rgba(14,13,11,.2) 40%, transparent 70%),
-    linear-gradient(to right, rgba(14,13,11,.25) 0%, transparent 40%),
-    linear-gradient(to bottom, rgba(14,13,11,.4) 0%, transparent 30%);
-}
-/* Letterbox bars — cinematic feel */
+
+/* Cinematic letterbox bars */
 .hero-bar-top,
 .hero-bar-bottom {
-  position: absolute; left: 0; right: 0; z-index: 2;
-  background: var(--black); height: 0;
-  transition: height .8s cubic-bezier(.23,1,.32,1);
+  position: absolute; left: 0; right: 0; z-index: 10;
+  background: var(--white); height: 0;
 }
 .hero-bar-top    { top: 0; }
 .hero-bar-bottom { bottom: 0; }
-.hero.loaded .hero-bar-top,
-.hero.loaded .hero-bar-bottom { height: 0; } /* bars start closed then open via JS */
 
-/* Hero Content — ultra-minimal */
-.hero-content {
-  position: relative; z-index: 3;
-  padding: 0 52px 72px; width: 100%;
-  display: flex; flex-direction: column; align-items: flex-start;
+/* Three-column layout: side panels + centre video */
+.hero-layout {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+/* Left whitespace panel */
+.hero-side {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 0 48px 72px 52px;
+  position: relative;
+  z-index: 3;
+  background: var(--white);
+}
+.hero-side.right {
+  padding: 0 52px 72px 48px;
+  align-items: flex-end;
+  text-align: right;
+}
+
+/* Side decorative elements */
+.hero-side-label {
+  font-family: var(--sans);
+  font-size: .52rem;
+  letter-spacing: .38em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 20px;
+  opacity: 0;
+  animation: fadeIn 1s 2s forwards;
 }
 .hero-brand {
-  font-family: var(--serif); font-weight: 300;
-  font-size: clamp(3rem, 7vw, 8rem);
-  letter-spacing: .12em; line-height: 1;
-  color: var(--linen);
-  text-shadow: 0 2px 40px rgba(0,0,0,.3);
-  opacity: 0; transform: translateY(20px);
+  font-family: var(--serif);
+  font-weight: 300;
+  font-size: clamp(2.2rem, 3.5vw, 4.5rem);
+  letter-spacing: .08em;
+  line-height: 1;
+  color: var(--black);
+  opacity: 0;
   animation: heroTitle 1.6s 1s cubic-bezier(.23,1,.32,1) forwards;
 }
 .hero-sub-line {
-  font-family: var(--serif); font-style: italic; font-weight: 300;
-  font-size: clamp(1rem, 2.2vw, 2rem);
-  color: rgba(232,216,188,.7); letter-spacing: .08em;
-  margin-top: 8px;
-  opacity: 0; animation: heroTitle 1.4s 1.4s cubic-bezier(.23,1,.32,1) forwards;
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(.8rem, 1.2vw, 1.15rem);
+  color: var(--smoke);
+  letter-spacing: .06em;
+  margin-top: 10px;
+  max-width: 220px;
+  line-height: 1.7;
+  opacity: 0;
+  animation: heroTitle 1.4s 1.4s cubic-bezier(.23,1,.32,1) forwards;
 }
 .hero-enter {
-  margin-top: 40px;
-  display: inline-flex; align-items: center; gap: 20px;
-  font-size: .6rem; letter-spacing: .3em; text-transform: uppercase;
-  color: rgba(232,216,188,.6); text-decoration: none;
-  opacity: 0; animation: fadeIn 1s 2.2s forwards;
+  margin-top: 36px;
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  font-size: .56rem;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  color: var(--black);
+  text-decoration: none;
+  opacity: 0;
+  animation: fadeIn 1s 2.2s forwards;
   transition: color .3s;
 }
 .hero-enter::after {
   content: '';
-  display: block; width: 56px; height: 1px;
-  background: var(--gold-light);
+  display: block; width: 44px; height: 1px;
+  background: var(--gold);
   transition: width .4s ease;
 }
-.hero-enter:hover { color: var(--gold-light); }
-.hero-enter:hover::after { width: 90px; }
+.hero-enter:hover { color: var(--gold); }
+.hero-enter:hover::after { width: 72px; }
 
-/* Parallax hero image shift */
-.hero-media { will-change: transform; }
-
-/* Scroll cue */
+/* Right side decorative text */
+.hero-year {
+  font-family: var(--serif);
+  font-size: clamp(4rem, 8vw, 9rem);
+  font-weight: 300;
+  color: rgba(154,122,68,.07);
+  line-height: 1;
+  letter-spacing: .04em;
+  margin-bottom: 16px;
+  opacity: 0;
+  animation: fadeIn 1.2s 1.8s forwards;
+}
+.hero-collection-label {
+  font-size: .52rem;
+  letter-spacing: .32em;
+  text-transform: uppercase;
+  color: var(--smoke);
+  opacity: 0;
+  animation: fadeIn 1s 2.2s forwards;
+}
 .hero-scroll-cue {
-  position: absolute; bottom: 36px; right: 52px; z-index: 3;
-  display: flex; flex-direction: column; align-items: center; gap: 10px;
-  opacity: 0; animation: fadeIn 1s 2.8s forwards;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  margin-top: 40px;
+  opacity: 0;
+  animation: fadeIn 1s 2.8s forwards;
 }
 .hero-scroll-cue span {
-  font-size: .52rem; letter-spacing: .35em; text-transform: uppercase;
-  color: rgba(232,216,188,.4); writing-mode: vertical-rl;
+  font-size: .5rem; letter-spacing: .35em; text-transform: uppercase;
+  color: var(--stone); writing-mode: vertical-rl;
 }
 .scroll-line {
-  width: 1px; height: 60px;
-  background: linear-gradient(to bottom, rgba(154,122,68,.6), transparent);
+  width: 1px; height: 56px;
+  background: linear-gradient(to bottom, var(--gold), transparent);
   animation: scrollPulse 2s 3s infinite;
 }
 
-/* Collection Year stamp */
-.hero-stamp {
-  position: absolute; top: 44%; right: 52px; z-index: 3;
-  opacity: 0; animation: fadeIn 1s 2.4s forwards;
-  text-align: right;
+/* Thin gold vertical rule between side and video */
+.hero-rule {
+  width: 1px;
+  background: rgba(154,122,68,.15);
+  flex-shrink: 0;
+  opacity: 0;
+  animation: fadeIn 1s 1.6s forwards;
 }
-.hero-stamp-num {
-  font-family: var(--serif); font-size: 7rem; font-weight: 300;
-  color: rgba(154,122,68,.06); line-height: 1; letter-spacing: .05em;
+
+/* Centre portrait video container */
+.hero-video-wrap {
+  /* Portrait ratio: ~9:16, capped so it fills height */
+  width: calc(100vh * 9 / 16);
+  max-width: 42vw;
+  min-width: 280px;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+  background: var(--black);
 }
-.hero-stamp-label {
-  font-size: .52rem; letter-spacing: .3em; text-transform: uppercase;
-  color: rgba(232,216,188,.3);
+
+.hero-video-wrap video,
+.hero-video-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+}
+
+/* Subtle vignette on video edges */
+.hero-video-wrap::after {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(to bottom, rgba(14,13,11,.35) 0%, transparent 25%, transparent 70%, rgba(14,13,11,.5) 100%),
+    linear-gradient(to right,  rgba(14,13,11,.2)  0%, transparent 12%, transparent 88%, rgba(14,13,11,.2) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Thin gold bottom bar on video */
+.hero-video-wrap::before {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--gold);
+  z-index: 2;
+  opacity: 0;
+  animation: fadeIn .6s 2s forwards;
+}
+
+/* Collection name overlaid bottom of video */
+.hero-video-caption {
+  position: absolute;
+  bottom: 28px; left: 0; right: 0;
+  z-index: 3;
+  text-align: center;
+  opacity: 0;
+  animation: fadeIn 1s 2.4s forwards;
+}
+.hero-video-caption span {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(.75rem, 1.1vw, 1rem);
+  color: rgba(242,237,229,.6);
+  letter-spacing: .12em;
 }
 
 /* ─── MARQUEE ────────────────────────────── */
@@ -282,7 +383,6 @@ nav.hero-mode .hamburger span { background: rgba(242,237,229,.85); }
 .ornament-sym { font-family: var(--serif); font-size: 1rem; color: var(--gold); letter-spacing: .25em; }
 
 /* ─── SCROLL REVEAL (JS-driven) ─────────── */
-/* Base states — set via JS by adding class */
 [data-reveal] {
   opacity: 0;
   transition: opacity .9s cubic-bezier(.23,1,.32,1), transform .9s cubic-bezier(.23,1,.32,1);
@@ -330,7 +430,6 @@ nav.hero-mode .hamburger span { background: rgba(242,237,229,.85); }
 }
 .g-item:hover img { transform: scale(1.05); filter: brightness(1) saturate(1); }
 
-/* Top-line gold reveal on hover */
 .g-item::before {
   content: ''; position: absolute; top: 0; left: 0;
   width: 0; height: 2px; background: var(--gold); z-index: 3;
@@ -350,7 +449,6 @@ nav.hero-mode .hamburger span { background: rgba(242,237,229,.85); }
 .g-caption-name { font-family: var(--serif); font-size: 1.25rem; font-weight: 300; color: var(--linen); line-height: 1.2; }
 .g-caption-tech { font-size: .56rem; letter-spacing: .18em; color: rgba(242,237,229,.5); margin-top: 3px; text-transform: uppercase; }
 
-/* Grid positions — intentionally asymmetric */
 .gi-1 { grid-column: 1/6;  grid-row: 1; height: 660px; }
 .gi-2 { grid-column: 6/9;  grid-row: 1; height: 400px; align-self: start; }
 .gi-3 { grid-column: 9/13; grid-row: 1; height: 500px; align-self: end; margin-top: 160px; }
@@ -542,10 +640,10 @@ footer { background: var(--black); color: var(--linen); padding: 80px 52px 44px;
 .footer-copy   { font-size: .56rem; letter-spacing: .12em; color: rgba(242,237,229,.2); }
 .footer-craft  { font-family: var(--serif); font-style: italic; font-size: .78rem; color: rgba(154,122,68,.4); }
 
-/* ─── PARALLAX SECTIONS ─────────────────── */
+/* ─── PARALLAX ─────────────────────────── */
 .parallax-img { will-change: transform; }
 
-/* ─── MUSEUM COUNTER STRIP ───────────────── */
+/* ─── COUNTER STRIP ──────────────────────── */
 .counter-strip {
   background: var(--linen); padding: 64px 52px;
   display: grid; grid-template-columns: repeat(4,1fr);
@@ -572,7 +670,7 @@ footer { background: var(--black); color: var(--linen); padding: 80px 52px 44px;
   100% { transform:scaleY(0); transform-origin: bottom; opacity:0; }
 }
 
-/* ─── HORIZONTAL TICKER FADE ────────────── */
+/* ─── TICKER ─────────────────────────────── */
 .ticker-fade {
   background: var(--white); padding: 28px 0; overflow: hidden;
   border-top: 1px solid rgba(154,122,68,.1);
@@ -580,27 +678,17 @@ footer { background: var(--black); color: var(--linen); padding: 80px 52px 44px;
 }
 .ticker-inner { display: inline-flex; gap: 0; animation: marquee 40s linear infinite reverse; }
 .ticker-item { font-family: var(--serif); font-style: italic; font-size: 1.1rem; font-weight: 300; color: rgba(14,13,11,.18); padding: 0 48px; white-space: nowrap; }
-
-/* ─── STICKY SECTION LABEL ───────────────── */
-.sticky-label {
-  position: sticky; top: 100px;
-  font-size: .54rem; letter-spacing: .3em; color: rgba(154,122,68,.6);
-  text-transform: uppercase; padding: 0 52px; margin-bottom: -80px;
-  z-index: 10;
-}
 </style>
 </head>
 <body>
 
 <!-- Cursor -->
-<div class="cursor"     id="cursor"></div>
+<div class="cursor"      id="cursor"></div>
 <div class="cursor-ring" id="cursorRing"></div>
 <div class="nav-progress" id="navProgress"></div>
 
-<!-- ═══════════════════════════════════════
-     NAV
-═══════════════════════════════════════ -->
-<nav id="mainNav" class="hero-mode">
+<!-- ═══ NAV ═══════════════════════════════ -->
+<nav id="mainNav">
   <a href="#" class="nav-logo">QILA Heritage</a>
   <div class="nav-right">
     <a href="#exhibition" class="nav-link">Collections</a>
@@ -610,9 +698,7 @@ footer { background: var(--black); color: var(--linen); padding: 80px 52px 44px;
   </div>
 </nav>
 
-<!-- ═══════════════════════════════════════
-     FULLSCREEN MENU
-═══════════════════════════════════════ -->
+<!-- ═══ FULLSCREEN MENU ════════════════════ -->
 <div class="menu-overlay" id="menuOverlay">
   <a href="#" class="menu-nav-item">The Collections</a>
   <a href="#" class="menu-nav-item">Baroque Noir</a>
@@ -625,59 +711,65 @@ footer { background: var(--black); color: var(--linen); padding: 80px 52px 44px;
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════
-     HERO — CINEMATIC FULLSCREEN
-═══════════════════════════════════════ -->
+<!-- ═══ HERO — PORTRAIT VIDEO ══════════════ -->
 <section class="hero" id="hero">
-  <!-- ┌─────────────────────────────────────
-       │ MEDIA LAYER
-       │ Replace src below with your video or image.
-       │ For video: use <video> tag. For still: use <img>.
-       │ Recommended hero image: 3840×2160px, dark/editorial fashion shot.
-       └───────────────────────────────────── -->
-  <div class="hero-media" id="heroMedia">
-    <!-- VIDEO option (uncomment and replace src):
-    <video autoplay muted loop playsinline poster="https://placehold.co/1920x1080/0E0D0B/B8965A?text=QILA+Heritage">
-      <source src="YOUR_VIDEO_FILE.mp4" type="video/mp4">
-    </video>
-    -->
-    <!-- IMAGE fallback (replace src with your hero editorial image) -->
-    <img
-      src="https://placehold.co/1920x1080/0E0D0B/9A7A44?text=HERO+EDITORIAL+IMAGE+%7C+1920x1080"
-      alt="QILA Heritage — Baroque Noir Collection"
-      id="heroImg"
-    >
-    <!-- REPLACE src above with your hero image URL, e.g.:
-         src="https://cdn.shopify.com/your-store/files/hero-baroque-noir.jpg"
-    -->
-  </div>
-
-  <div class="hero-vignette"></div>
   <div class="hero-bar-top"    id="heroBarTop"></div>
   <div class="hero-bar-bottom" id="heroBarBottom"></div>
 
-  <!-- Minimal stamp -->
-  <div class="hero-stamp">
-    <div class="hero-stamp-num">2024</div>
-    <div class="hero-stamp-label">Couture Collection</div>
-  </div>
+  <div class="hero-layout">
 
-  <!-- Minimal text — brand name + one line -->
-  <div class="hero-content">
-    <div class="hero-brand">QILA<br>Heritage</div>
-    <div class="hero-sub-line">A Study in the Resonance of Shadow</div>
-    <a href="#exhibition" class="hero-enter">Enter the Exhibition</a>
-  </div>
+    <!-- LEFT PANEL — brand name + enter CTA -->
+    <div class="hero-side">
+      <div class="hero-side-label">Couture 2024</div>
+      <div class="hero-brand">QILA<br>Heritage</div>
+      <div class="hero-sub-line">A Study in the Resonance of Shadow</div>
+      <a href="#exhibition" class="hero-enter">Enter the Exhibition</a>
+    </div>
 
-  <div class="hero-scroll-cue">
-    <span>Scroll</span>
-    <div class="scroll-line"></div>
+    <!-- Thin rule -->
+    <div class="hero-rule"></div>
+
+    <!-- CENTRE — portrait video -->
+    <div class="hero-video-wrap" id="heroVideoWrap">
+      <!--
+        PORTRAIT VIDEO — replace src with your video file.
+        Recommended: 1080×1920px (9:16), MP4, dark editorial footage.
+
+        <video autoplay muted loop playsinline
+          poster="YOUR_POSTER_IMAGE.jpg">
+          <source src="vid 1.mp4" type="video/mp4">
+        </video>
+
+        Until your video is ready, a placeholder image is shown below.
+        REPLACE the <img> with the <video> block above when ready.
+      -->
+      <img
+        src="https://placehold.co/1080x1920/0E0D0B/9A7A44?text=PORTRAIT+VIDEO%0A1080×1920px%0AReplace+with+%3Cvideo%3E+tag"
+        alt="QILA Heritage — Baroque Noir"
+        id="heroImg"
+      >
+      <div class="hero-video-caption">
+        <span>Baroque Noir Collection · 2024</span>
+      </div>
+    </div>
+
+    <!-- Thin rule -->
+    <div class="hero-rule"></div>
+
+    <!-- RIGHT PANEL — year stamp + scroll cue -->
+    <div class="hero-side right">
+      <div class="hero-year">2024</div>
+      <div class="hero-collection-label">Iridescent Heritage</div>
+      <div class="hero-scroll-cue">
+        <span>Scroll</span>
+        <div class="scroll-line"></div>
+      </div>
+    </div>
+
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════
-     MARQUEE
-═══════════════════════════════════════ -->
+<!-- ═══ MARQUEE ════════════════════════════ -->
 <div class="marquee-strip">
   <div class="marquee-inner">
     <span class="marquee-item">Pitta Work <span class="marquee-dot">◆</span></span>
@@ -697,9 +789,7 @@ footer { background: var(--black); color: var(--linen); padding: 80px 52px 44px;
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════
-     EXHIBITION — GALLERY
-═══════════════════════════════════════ -->
+<!-- ═══ EXHIBITION ══════════════════════════ -->
 <section class="exhibition" id="exhibition">
   <div class="exhibition-header">
     <div data-reveal="up">
@@ -710,92 +800,51 @@ footer { background: var(--black); color: var(--linen); padding: 80px 52px 44px;
   </div>
 
   <div class="gallery-grid">
-    <!-- ░░ LOOK 01 — replace image src ░░ -->
     <div class="g-item gi-1" data-reveal="up">
-      <img
-        src="5.jpeg"
-        alt="Look 01 — The Sovereign Drape"
-      >
-      <!-- REPLACE src: your Look 01 image (portrait, 4:6 ratio) -->
+      <img src="5.jpeg" alt="Look 01 — The Sovereign Drape">
       <div class="g-item-caption">
         <div class="g-caption-num">Look 01</div>
         <div class="g-caption-name">The Sovereign Drape</div>
         <div class="g-caption-tech">Antique Metallic · Pitta Work</div>
       </div>
     </div>
-
-    <!-- ░░ LOOK 02 ░░ -->
     <div class="g-item gi-2" data-reveal="up" data-delay="100">
-      <img
-        src="7.jpeg"
-        alt="Look 02 — The Pleated Mantle"
-      >
-      <!-- REPLACE src: Look 02 image -->
+      <img src="7.jpeg" alt="Look 02 — The Pleated Mantle">
       <div class="g-item-caption">
         <div class="g-caption-num">Look 02</div>
         <div class="g-caption-name">The Pleated Mantle</div>
         <div class="g-caption-tech">Architectural Pleating</div>
       </div>
     </div>
-
-    <!-- ░░ LOOK 03 ░░ -->
     <div class="g-item gi-3" data-reveal="right" data-delay="180">
-      <img
-        src="25.jpeg"
-        alt="Look 03 — The Cocktail Edit"
-      >
-      <!-- REPLACE src: Look 03 image -->
+      <img src="25.jpeg" alt="Look 03 — The Cocktail Edit">
       <div class="g-item-caption">
         <div class="g-caption-num">Look 03</div>
         <div class="g-caption-name">The Cocktail Edit</div>
         <div class="g-caption-tech">Dense Zardozi · Cage Structure</div>
       </div>
     </div>
-
-    <!-- ░░ DETAIL CLOSE-UP ░░ -->
     <div class="g-item gi-4" data-reveal="up" data-delay="120">
-      <img
-        src="17.jpeg"
-        alt="Craftsmanship Detail"
-      >
-      <!-- REPLACE src: embroidery/craft detail close-up -->
+      <img src="17.jpeg" alt="Craftsmanship Detail">
     </div>
-
-    <!-- ░░ HERITAGE BLAZER ░░ -->
     <div class="g-item gi-5" data-reveal="up">
-      <img
-        src="28.jpg"
-        alt="Heritage Patchwork Blazer"
-      >
-      <!-- REPLACE src: Heritage Patchwork Blazer image -->
+      <img src="28.jpg" alt="Heritage Patchwork Blazer">
       <div class="g-item-caption">
         <div class="g-caption-num">Heritage</div>
         <div class="g-caption-name">The Patchwork Blazer</div>
         <div class="g-caption-tech">Threadwork · Mirror Embroidery</div>
       </div>
     </div>
-
-    <!-- ░░ CRIMSON DRAPE ░░ -->
     <div class="g-item gi-6" data-reveal="up" data-delay="100">
-      <img
-        src="29.jpg"
-        alt="The Crimson Drape"
-      >
-      <!-- REPLACE src: Crimson Drape editorial image -->
+      <img src="29.jpg" alt="The Crimson Drape">
       <div class="g-item-caption">
         <div class="g-caption-num">Heritage 02</div>
         <div class="g-caption-name">The Crimson Drape</div>
         <div class="g-caption-tech">Midnight Grandeur · Zardozi</div>
       </div>
     </div>
-
-    <!-- ░░ EMERALD SOIREE ░░ -->
     <div class="g-item gi-7" data-reveal="right" data-delay="200">
-      <img
-        src="30.jpg"
-        alt="Emerald Summer Soirée"
-      >
-      <!-- REPLACE src: Emerald Summer Soirée image -->
+      <img src="30.jpg" alt="Emerald Summer Soirée">
       <div class="g-item-caption">
         <div class="g-caption-num">Heritage 03</div>
         <div class="g-caption-name">Emerald Summer Soirée</div>
@@ -805,7 +854,7 @@ footer { background: var(--black); color: var(--linen); padding: 80px 52px 44px;
   </div>
 </section>
 
-<!-- ─── Italic ticker ────────────────────── -->
+<!-- ─── Italic ticker ─────────────────────── -->
 <div class="ticker-fade">
   <div class="ticker-inner">
     <span class="ticker-item">The Sovereign Drape</span>
@@ -835,9 +884,7 @@ footer { background: var(--black); color: var(--linen); padding: 80px 52px 44px;
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════
-     MUSEUM COUNTER STRIP
-═══════════════════════════════════════ -->
+<!-- ═══ COUNTER STRIP ═══════════════════════ -->
 <div class="counter-strip">
   <div class="counter-item" data-reveal="up">
     <div class="counter-num" data-count="9">0</div>
@@ -857,9 +904,7 @@ footer { background: var(--black); color: var(--linen); padding: 80px 52px 44px;
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════
-     CRAFT ARCHIVE
-═══════════════════════════════════════ -->
+<!-- ═══ CRAFT ARCHIVE ═══════════════════════ -->
 <section class="craft-archive" id="craft">
   <div class="craft-inner">
     <div class="craft-text-panel">
@@ -874,40 +919,17 @@ footer { background: var(--black); color: var(--linen); padding: 80px 52px 44px;
         <div class="craft-technique"><span class="ct-name">Heritage Patchwork</span><span class="ct-origin">Multidisciplinary</span></div>
       </div>
     </div>
-
     <div class="craft-visual-panel">
-      <!-- ░░ CRAFT / ARTISAN IMAGE ░░
-           Replace src with a close-up of embroidery, craft process, or artisan hands.
-           Recommended: 1200x1600px, portrait orientation.
-      -->
-      <img
-        class="parallax-img"
-        src="13.jpeg"
-        alt="QILA Craftsmanship — Artisan Detail"
-        id="craftImg"
-      >
-      <!-- REPLACE src above: artisan embroidery detail or craft process shot -->
+      <img class="parallax-img" src="13.jpeg" alt="QILA Craftsmanship — Artisan Detail" id="craftImg">
       <div class="craft-img-text">One Stitch<br>at a Time</div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════
-     EDITORIAL STRIPS
-═══════════════════════════════════════ -->
-
-<!-- Strip 1 -->
+<!-- ═══ EDITORIAL STRIPS ════════════════════ -->
 <div class="ed-strip" data-reveal="fade">
   <div class="ed-img-panel">
-    <!-- ░░ EDITORIAL PIECE IMAGE ░░
-         Replace with Emerald Heritage Longcoat image.
-         Recommended: 1200x900px, landscape or portrait.
-    -->
-    <img
-      src="33.jpg"
-      alt="Exhibit 07 — Emerald Heritage Longcoat"
-    >
-    <!-- REPLACE src: Emerald Heritage Longcoat editorial image -->
+    <img src="33.jpg" alt="Exhibit 07 — Emerald Heritage Longcoat">
   </div>
   <div class="ed-text-panel">
     <div class="ed-num">07</div>
@@ -917,18 +939,9 @@ footer { background: var(--black); color: var(--linen); padding: 80px 52px 44px;
   </div>
 </div>
 
-<!-- Strip 2 — flipped -->
 <div class="ed-strip flip" data-reveal="fade">
   <div class="ed-img-panel">
-    <!-- ░░ AVANT-GARDE GOWN IMAGE ░░
-         Replace with Avant-Garde Sculptural Gown image.
-         Recommended: 1200x900px.
-    -->
-    <img
-      src="32.jpg"
-      alt="Exhibit 06 — Avant-Garde Sculptural Gown"
-    >
-    <!-- REPLACE src: Avant-Garde Sculptural Gown editorial image -->
+    <img src="32.jpg" alt="Exhibit 06 — Avant-Garde Sculptural Gown">
   </div>
   <div class="ed-text-panel">
     <div class="ed-num">06</div>
@@ -938,17 +951,9 @@ footer { background: var(--black); color: var(--linen); padding: 80px 52px 44px;
   </div>
 </div>
 
-<!-- Strip 3 -->
 <div class="ed-strip" data-reveal="fade">
   <div class="ed-img-panel">
-    <!-- ░░ BLUSH GOWN IMAGE ░░
-         Replace with Blush Embellished Gown image.
-    -->
-    <img
-      src="35.jpg"
-      alt="Exhibit 09 — Blush Embellished Gown"
-    >
-    <!-- REPLACE src: Blush Embellished Gown image -->
+    <img src="35.jpg" alt="Exhibit 09 — Blush Embellished Gown">
   </div>
   <div class="ed-text-panel">
     <div class="ed-num">09</div>
@@ -958,9 +963,7 @@ footer { background: var(--black); color: var(--linen); padding: 80px 52px 44px;
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════
-     IRIDESCENT HERITAGE GRID
-═══════════════════════════════════════ -->
+<!-- ═══ IRIDESCENT HERITAGE GRID ═══════════ -->
 <section class="heritage-grid-sec" id="heritage">
   <div class="section-label" style="justify-content:center;" data-reveal="fade">The Iridescent Heritage Collection</div>
   <div class="ornament" data-reveal="fade">
@@ -971,47 +974,24 @@ footer { background: var(--black); color: var(--linen); padding: 80px 52px 44px;
   <h2 class="hg-title" data-reveal="up">Where <em>Heritage</em><br>meets the Avant-Garde</h2>
 
   <div class="heritage-grid">
-    <!-- Left card -->
     <div class="hg-card" data-reveal="left" style="padding-bottom:60px;">
       <div class="hg-card-img hg-card-img-tall">
-        <!-- ░░ AURELIA MIDNIGHT PAISLEY IMAGE ░░ -->
-        <img
-          src="11.jpeg"
-          alt="Aurelia Midnight Paisley"
-        >
-        <!-- REPLACE src: Aurelia Midnight Paisley image -->
+        <img src="11.jpeg" alt="Aurelia Midnight Paisley">
       </div>
       <div class="hg-card-label">Exhibit 04</div>
       <div class="hg-card-name">Aurelia Midnight Paisley</div>
       <div class="hg-card-desc">Deep navy silk, oversized silver paisley. Modern Opulence collection.</div>
     </div>
-
-    <!-- Centre card — taller -->
     <div class="hg-card" data-reveal="up" data-delay="100">
       <div class="hg-card-img hg-card-img-hero">
-        <!-- ░░ FEATURED CENTRE IMAGE ░░
-             Use your most striking hero piece here — full bleed, high detail.
-             Recommended: 700x1000px.
-        -->
-        <img
-          src="1.jpeg"
-          alt="QILA Heritage — Featured Signature Piece"
-        >
-        <!-- REPLACE src: your hero / most iconic piece photo -->
+        <img src="1.jpeg" alt="QILA Heritage — Featured Signature Piece">
       </div>
       <div class="hg-card-label center">Exhibit 09 · The Peaches of Spring</div>
       <div class="hg-card-name center">A Final Note of <em style="font-style:italic;color:var(--gold);">Romance</em></div>
     </div>
-
-    <!-- Right card -->
     <div class="hg-card" data-reveal="right" data-delay="150" style="padding-bottom:60px;">
       <div class="hg-card-img hg-card-img-tall">
-        <!-- ░░ EMERALD OPULENCE KAFTAN IMAGE ░░ -->
-        <img
-          src="34.jpg"
-          alt="Emerald Opulence Kaftan"
-        >
-        <!-- REPLACE src: Emerald Opulence Kaftan image -->
+        <img src="34.jpg" alt="Emerald Opulence Kaftan">
       </div>
       <div class="hg-card-label right">Exhibit 08</div>
       <div class="hg-card-name right">Emerald Opulence Kaftan</div>
@@ -1020,9 +1000,7 @@ footer { background: var(--black); color: var(--linen); padding: 80px 52px 44px;
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════
-     FOUNDER QUOTE (dark)
-═══════════════════════════════════════ -->
+<!-- ═══ FOUNDER QUOTE ═══════════════════════ -->
 <section class="founder-sec">
   <div class="founder-vert" data-reveal="fade">Creative Vision</div>
   <div data-reveal="up">
@@ -1039,9 +1017,7 @@ footer { background: var(--black); color: var(--linen); padding: 80px 52px 44px;
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════
-     MUSEUM PILLARS
-═══════════════════════════════════════ -->
+<!-- ═══ MUSEUM PILLARS ══════════════════════ -->
 <section class="pillars">
   <h2 class="pillars-title" data-reveal="up">The <em>Philosophy</em><br>of QILA</h2>
   <div class="pillars-grid">
@@ -1063,9 +1039,7 @@ footer { background: var(--black); color: var(--linen); padding: 80px 52px 44px;
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════
-     FOOTER
-═══════════════════════════════════════ -->
+<!-- ═══ FOOTER ══════════════════════════════ -->
 <footer>
   <div class="footer-top">
     <div>
@@ -1102,9 +1076,7 @@ footer { background: var(--black); color: var(--linen); padding: 80px 52px 44px;
   </div>
 </footer>
 
-<!-- ═══════════════════════════════════════
-     SCRIPTS
-═══════════════════════════════════════ -->
+<!-- ═══ SCRIPTS ══════════════════════════════ -->
 <script>
 /* ─── Cursor ──────────────────────────── */
 const cursor = document.getElementById('cursor');
@@ -1118,24 +1090,19 @@ document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; })
   requestAnimationFrame(animate);
 })();
 
-/* ─── Nav / hero-mode ─────────────────── */
-const nav       = document.getElementById('mainNav');
-const navProg   = document.getElementById('navProgress');
-const heroEl    = document.getElementById('hero');
-const heroH     = () => heroEl.getBoundingClientRect().bottom;
+/* ─── Nav ─────────────────────────────── */
+const nav     = document.getElementById('mainNav');
+const navProg = document.getElementById('navProgress');
+const heroEl  = document.getElementById('hero');
 
 window.addEventListener('scroll', () => {
-  const sy = window.scrollY;
+  const sy    = window.scrollY;
   const total = document.body.scrollHeight - innerHeight;
   navProg.style.width = (sy / total * 100) + '%';
-
-  // scrolled bg
   nav.classList.toggle('scrolled', sy > 60);
-  // light text only while hero is visible
-  nav.classList.toggle('hero-mode', heroH() > 80);
 }, { passive: true });
 
-/* ─── Hamburger menu ──────────────────── */
+/* ─── Hamburger ───────────────────────── */
 const hamburger   = document.getElementById('hamburger');
 const menuOverlay = document.getElementById('menuOverlay');
 let open = false;
@@ -1147,13 +1114,14 @@ hamburger.addEventListener('click', () => {
 });
 menuOverlay.querySelectorAll('.menu-nav-item').forEach(a => {
   a.addEventListener('click', () => {
-    open = false; hamburger.classList.remove('active');
+    open = false;
+    hamburger.classList.remove('active');
     menuOverlay.classList.remove('active');
     document.body.style.overflow = '';
   });
 });
 
-/* ─── Hero cinematic open ─────────────── */
+/* ─── Cinematic open bars ─────────────── */
 (function heroOpen() {
   const bt = document.getElementById('heroBarTop');
   const bb = document.getElementById('heroBarBottom');
@@ -1165,14 +1133,12 @@ menuOverlay.querySelectorAll('.menu-nav-item').forEach(a => {
   }, 200);
 })();
 
-/* ─── Hero parallax ───────────────────── */
-const heroMedia = document.getElementById('heroMedia');
-window.addEventListener('scroll', () => {
-  const sy = window.scrollY;
-  if (sy < innerHeight) {
-    heroMedia.style.transform = `translateY(${sy * 0.32}px)`;
-  }
-}, { passive: true });
+/* ─── Subtle slow zoom on hero video/img ─ */
+const heroImg = document.getElementById('heroImg');
+if (heroImg) {
+  heroImg.style.transition = 'transform 18s ease';
+  setTimeout(() => { heroImg.style.transform = 'scale(1.04)'; }, 600);
+}
 
 /* ─── Craft image parallax ────────────── */
 const craftImg = document.getElementById('craftImg');
@@ -1199,15 +1165,12 @@ const ro = new IntersectionObserver(entries => {
 }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
 revealEls.forEach(el => ro.observe(el));
 
-/* ─── Counter animation ───────────────── */
+/* ─── Counters ────────────────────────── */
 const counters = document.querySelectorAll('[data-count]');
 const co = new IntersectionObserver(entries => {
   entries.forEach(e => {
     if (!e.isIntersecting) return;
-    const el    = e.target;
-    const end   = +el.dataset.count;
-    const dur   = 1400;
-    const start = performance.now();
+    const el = e.target, end = +el.dataset.count, dur = 1400, start = performance.now();
     const suffix = end >= 100 ? '+' : '';
     (function tick(now) {
       const t = Math.min((now - start) / dur, 1);
@@ -1220,7 +1183,7 @@ const co = new IntersectionObserver(entries => {
 }, { threshold: 0.5 });
 counters.forEach(c => co.observe(c));
 
-/* ─── Smooth scroll anchors ───────────── */
+/* ─── Smooth scroll ───────────────────── */
 document.querySelectorAll('a[href^="#"]').forEach(a => {
   a.addEventListener('click', e => {
     const t = document.querySelector(a.getAttribute('href'));
@@ -1228,10 +1191,10 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   });
 });
 
-/* ─── Gallery item stagger on enter ─────  */
+/* ─── Gallery stagger ─────────────────── */
 const galleryItems = document.querySelectorAll('.g-item');
 const go = new IntersectionObserver(entries => {
-  entries.forEach((e, i) => {
+  entries.forEach(e => {
     if (e.isIntersecting) {
       const items = [...e.target.closest('.gallery-grid').querySelectorAll('.g-item')];
       const idx   = items.indexOf(e.target);
@@ -1240,10 +1203,11 @@ const go = new IntersectionObserver(entries => {
     }
   });
 }, { threshold: 0.05 });
-galleryItems.forEach(g => { g.style.opacity = '0'; g.style.transition = 'opacity .7s ease'; go.observe(g); });
-
-/* ─── Pillar line-draw on hover (decorative) ─── */
-// already handled in CSS ::after transition
+galleryItems.forEach(g => {
+  g.style.opacity = '0';
+  g.style.transition = 'opacity .7s ease';
+  go.observe(g);
+});
 </script>
 
 </body>
