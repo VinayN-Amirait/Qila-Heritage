@@ -154,26 +154,45 @@ nav.hero-mode .hamburger span { background: rgba(242,237,229,.85); }
   overflow: hidden;
   display: flex;
   align-items: stretch;
-  /* Seamless warm-to-cool gradient that mirrors the editorial image tones */
+  background: #1a1712; /* deep fallback */
+}
+
+/* ── FROSTED MIRROR: same image src, scaled wide, blurred hard ── */
+.hero-mirror {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+.hero-mirror img,
+.hero-mirror video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 15%;
+  display: block;
+  /* Aggressive blur + slight desaturate so it reads as atmosphere, not image */
+  filter: blur(56px) saturate(0.45) brightness(0.86);
+  transform: scale(1.15); /* prevents edge fringing from the blur */
+}
+/* Radial + linear vignette over the blur to kill flat look */
+.hero-mirror::after {
+  content: '';
+  position: absolute; inset: 0;
   background:
-    linear-gradient(
-      to right,
-      #EAE3D6 0%,
-      #E2DAC9 20%,
-      #D8D0BF 38%,
-      #CBC2AE 47%,
-      #CBC2AE 53%,
-      #D8D0BF 62%,
-      #E2DAC9 80%,
-      #EAE3D6 100%
-    );
+    radial-gradient(ellipse 60% 90% at 50% 50%,
+      transparent 20%, rgba(14,13,11,.48) 100%),
+    linear-gradient(to bottom,
+      rgba(14,13,11,.3) 0%, transparent 20%,
+      transparent 74%, rgba(14,13,11,.36) 100%);
+  pointer-events: none;
 }
 
 /* Cinematic letterbox bars */
 .hero-bar-top,
 .hero-bar-bottom {
   position: absolute; left: 0; right: 0; z-index: 10;
-  background: #EAE3D6; height: 0;
+  background: #1a1712; height: 0;
 }
 .hero-bar-top    { top: 0; }
 .hero-bar-bottom { bottom: 0; }
@@ -195,6 +214,8 @@ nav.hero-mode .hamburger span { background: rgba(242,237,229,.85); }
   position: relative;
   z-index: 3;
   background: transparent;
+  /* subtle frosted panel so text is legible over the blurred image */
+  backdrop-filter: none;
 }
 .hero-side.right {
   padding: 0 52px 72px 48px;
@@ -209,7 +230,7 @@ nav.hero-mode .hamburger span { background: rgba(242,237,229,.85); }
   font-size: .52rem;
   letter-spacing: .38em;
   text-transform: uppercase;
-  color: var(--gold);
+  color: var(--gold-light);
   margin-bottom: 20px;
   opacity: 0;
   animation: fadeIn 1s 2s forwards;
@@ -220,7 +241,7 @@ nav.hero-mode .hamburger span { background: rgba(242,237,229,.85); }
   font-size: clamp(2.2rem, 3.5vw, 4.5rem);
   letter-spacing: .08em;
   line-height: 1;
-  color: var(--black);
+  color: var(--linen);
   opacity: 0;
   animation: heroTitle 1.6s 1s cubic-bezier(.23,1,.32,1) forwards;
 }
@@ -236,6 +257,7 @@ nav.hero-mode .hamburger span { background: rgba(242,237,229,.85); }
   line-height: 1.7;
   opacity: 0;
   animation: heroTitle 1.4s 1.4s cubic-bezier(.23,1,.32,1) forwards;
+  color: rgba(242,237,229,.62);
 }
 .hero-enter {
   margin-top: 36px;
@@ -245,7 +267,7 @@ nav.hero-mode .hamburger span { background: rgba(242,237,229,.85); }
   font-size: .56rem;
   letter-spacing: .28em;
   text-transform: uppercase;
-  color: var(--black);
+  color: rgba(242,237,229,.7);
   text-decoration: none;
   opacity: 0;
   animation: fadeIn 1s 2.2s forwards;
@@ -257,7 +279,7 @@ nav.hero-mode .hamburger span { background: rgba(242,237,229,.85); }
   background: var(--gold);
   transition: width .4s ease;
 }
-.hero-enter:hover { color: var(--gold); }
+.hero-enter:hover { color: var(--gold-light); }
 .hero-enter:hover::after { width: 72px; }
 
 /* Right side decorative text */
@@ -265,7 +287,7 @@ nav.hero-mode .hamburger span { background: rgba(242,237,229,.85); }
   font-family: var(--serif);
   font-size: clamp(4rem, 8vw, 9rem);
   font-weight: 300;
-  color: rgba(154,122,68,.07);
+  color: rgba(196,160,106,.1);
   line-height: 1;
   letter-spacing: .04em;
   margin-bottom: 16px;
@@ -276,7 +298,7 @@ nav.hero-mode .hamburger span { background: rgba(242,237,229,.85); }
   font-size: .52rem;
   letter-spacing: .32em;
   text-transform: uppercase;
-  color: var(--smoke);
+  color: rgba(242,237,229,.45);
   opacity: 0;
   animation: fadeIn 1s 2.2s forwards;
 }
@@ -329,14 +351,14 @@ nav.hero-mode .hamburger span { background: rgba(242,237,229,.85); }
   display: block;
 }
 
-/* Subtle vignette on video edges */
+/* Subtle vignette on video edges — bottom and top only, no side colour */
 .hero-video-wrap::after {
   content: '';
   position: absolute; inset: 0;
   background:
-    linear-gradient(to bottom, rgba(14,13,11,.28) 0%, transparent 22%, transparent 72%, rgba(14,13,11,.45) 100%),
-    /* strong side feathers — bleed video colour into background */
-    linear-gradient(to right,  #CBC2AE 0%, rgba(203,194,174,0) 18%, rgba(203,194,174,0) 82%, #CBC2AE 100%);
+    linear-gradient(to bottom,
+      rgba(14,13,11,.3) 0%, transparent 20%,
+      transparent 72%, rgba(14,13,11,.52) 100%);
   pointer-events: none;
   z-index: 1;
 }
@@ -727,6 +749,17 @@ footer { background: var(--black); color: var(--linen); padding: 80px 52px 44px;
 
 <!-- ═══ HERO — PORTRAIT VIDEO ══════════════ -->
 <section class="hero" id="hero">
+
+  <!-- FROSTED MIRROR BACKGROUND — same src as portrait below, blurred full-width -->
+  <!-- When you swap to video: add a <video> here too with the same src, muted autoplay loop -->
+  <div class="hero-mirror" id="heroMirror">
+    <video autoplay muted loop playsinline
+          poster="YOUR_POSTER_IMAGE.jpg">
+          <source src="vid_1.mp4" type="video/mp4">
+        </video>
+    <!-- REPLACE src above with same image/video src as the portrait centre -->
+  </div>
+
   <div class="hero-bar-top"    id="heroBarTop"></div>
   <div class="hero-bar-bottom" id="heroBarBottom"></div>
 
@@ -757,10 +790,11 @@ footer { background: var(--black); color: var(--linen); padding: 80px 52px 44px;
         Until your video is ready, a placeholder image is shown below.
         REPLACE the <img> with the <video> block above when ready.
       -->
-      <video autoplay muted loop playsinline
-          poster="YOUR_POSTER_IMAGE.jpg">
-          <source src="vid_1.mp4" type="video/mp4">
-        </video>
+      <img
+        src="https://placehold.co/1080x1920/0E0D0B/9A7A44?text=PORTRAIT+VIDEO%0A1080×1920px%0AReplace+with+%3Cvideo%3E+tag"
+        alt="QILA Heritage — Baroque Noir"
+        id="heroImg"
+      >
       <div class="hero-video-caption">
         <span>Baroque Noir Collection · 2024</span>
       </div>
@@ -1146,9 +1180,19 @@ menuOverlay.querySelectorAll('.menu-nav-item').forEach(a => {
   }, 200);
 })();
 
-/* ─── Subtle slow zoom on hero video/img ─ */
-const heroImg = document.getElementById('heroImg');
-if (heroImg) {
+/* ─── Mirror sync + slow zoom ────────────── */
+const heroImg   = document.getElementById('heroImg');
+const mirrorImg = document.getElementById('heroMirrorImg');
+if (heroImg && mirrorImg) {
+  // Keep mirror src identical to portrait — swap both at once when you update
+  mirrorImg.src = heroImg.src;
+  // Portrait: slow zoom in
+  heroImg.style.transition = 'transform 18s ease';
+  setTimeout(() => { heroImg.style.transform = 'scale(1.04)'; }, 600);
+  // Mirror: slow drift opposite direction for parallax depth
+  mirrorImg.style.transition = 'transform 22s ease';
+  setTimeout(() => { mirrorImg.style.transform = 'scale(1.18) translateX(10px)'; }, 600);
+} else if (heroImg) {
   heroImg.style.transition = 'transform 18s ease';
   setTimeout(() => { heroImg.style.transform = 'scale(1.04)'; }, 600);
 }
