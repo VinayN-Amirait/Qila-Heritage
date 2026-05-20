@@ -790,11 +790,10 @@ footer { background: var(--black); color: var(--linen); padding: 80px 52px 44px;
         Until your video is ready, a placeholder image is shown below.
         REPLACE the <img> with the <video> block above when ready.
       -->
-      <img
-        src="https://placehold.co/1080x1920/0E0D0B/9A7A44?text=PORTRAIT+VIDEO%0A1080×1920px%0AReplace+with+%3Cvideo%3E+tag"
-        alt="QILA Heritage — Baroque Noir"
-        id="heroImg"
-      >
+      <video autoplay muted loop playsinline
+          poster="YOUR_POSTER_IMAGE.jpg">
+          <source src="vid_1.mp4" type="video/mp4">
+        </video>
       <div class="hero-video-caption">
         <span>Baroque Noir Collection · 2024</span>
       </div>
