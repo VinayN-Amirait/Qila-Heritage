@@ -154,14 +154,26 @@ nav.hero-mode .hamburger span { background: rgba(242,237,229,.85); }
   overflow: hidden;
   display: flex;
   align-items: stretch;
-  background: var(--white);
+  /* Seamless warm-to-cool gradient that mirrors the editorial image tones */
+  background:
+    linear-gradient(
+      to right,
+      #EAE3D6 0%,
+      #E2DAC9 20%,
+      #D8D0BF 38%,
+      #CBC2AE 47%,
+      #CBC2AE 53%,
+      #D8D0BF 62%,
+      #E2DAC9 80%,
+      #EAE3D6 100%
+    );
 }
 
 /* Cinematic letterbox bars */
 .hero-bar-top,
 .hero-bar-bottom {
   position: absolute; left: 0; right: 0; z-index: 10;
-  background: var(--white); height: 0;
+  background: #EAE3D6; height: 0;
 }
 .hero-bar-top    { top: 0; }
 .hero-bar-bottom { bottom: 0; }
@@ -182,12 +194,13 @@ nav.hero-mode .hamburger span { background: rgba(242,237,229,.85); }
   padding: 0 48px 72px 52px;
   position: relative;
   z-index: 3;
-  background: var(--white);
+  background: transparent;
 }
 .hero-side.right {
   padding: 0 52px 72px 48px;
   align-items: flex-end;
   text-align: right;
+  background: transparent;
 }
 
 /* Side decorative elements */
@@ -289,7 +302,7 @@ nav.hero-mode .hamburger span { background: rgba(242,237,229,.85); }
 /* Thin gold vertical rule between side and video */
 .hero-rule {
   width: 1px;
-  background: rgba(154,122,68,.15);
+  background: transparent;
   flex-shrink: 0;
   opacity: 0;
   animation: fadeIn 1s 1.6s forwards;
@@ -321,8 +334,9 @@ nav.hero-mode .hamburger span { background: rgba(242,237,229,.85); }
   content: '';
   position: absolute; inset: 0;
   background:
-    linear-gradient(to bottom, rgba(14,13,11,.35) 0%, transparent 25%, transparent 70%, rgba(14,13,11,.5) 100%),
-    linear-gradient(to right,  rgba(14,13,11,.2)  0%, transparent 12%, transparent 88%, rgba(14,13,11,.2) 100%);
+    linear-gradient(to bottom, rgba(14,13,11,.28) 0%, transparent 22%, transparent 72%, rgba(14,13,11,.45) 100%),
+    /* strong side feathers — bleed video colour into background */
+    linear-gradient(to right,  #CBC2AE 0%, rgba(203,194,174,0) 18%, rgba(203,194,174,0) 82%, #CBC2AE 100%);
   pointer-events: none;
   z-index: 1;
 }
@@ -737,7 +751,7 @@ footer { background: var(--black); color: var(--linen); padding: 80px 52px 44px;
 
         <video autoplay muted loop playsinline
           poster="YOUR_POSTER_IMAGE.jpg">
-          <source src="vid_1.mp4" type="video/mp4">
+          <source src="YOUR_PORTRAIT_VIDEO.mp4" type="video/mp4">
         </video>
 
         Until your video is ready, a placeholder image is shown below.
@@ -747,7 +761,6 @@ footer { background: var(--black); color: var(--linen); padding: 80px 52px 44px;
           poster="YOUR_POSTER_IMAGE.jpg">
           <source src="vid_1.mp4" type="video/mp4">
         </video>
-      
       <div class="hero-video-caption">
         <span>Baroque Noir Collection · 2024</span>
       </div>
